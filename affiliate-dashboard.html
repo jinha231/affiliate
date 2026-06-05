@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>원더X디퍼플 제휴처 리스트</title>
+  <style>
+    :root {
+      --wonder-teal: #00C9B1;
+      --dpurple-dark: #1A0A2E;
+      --dpurple-accent: #7B2FBE;
+      --bg: #F4F6FB;
+      --card-bg: #FFFFFF;
+      --border: #E2E8F0;
+      --text-main: #1E293B;
+      --text-sub: #64748B;
+      --status-plan: #EFF6FF;
+      --status-plan-text: #2563EB;
+      --status-ing: #FFF7ED;
+      --status-ing-text: #EA580C;
+      --status-done: #F0FDF4;
+      --status-done-text: #16A34A;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', 'Apple SD Gothic Neo', sans-serif;
+      background: var(--bg);
+      color: var(--text-main);
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      background: linear-gradient(135deg, var(--dpurple-dark) 0%, #2D1060 50%, #1A3A5C 100%);
+      padding: 20px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.25);
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+
+    /* Wonder logo replica */
+    .logo-wonder {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px 8px 12px;
+      border-radius: 10px 0 0 10px;
+      background: rgba(255,255,255,0.07);
+    }
+    .logo-wonder .icon {
+      width: 32px;
+      height: 32px;
+      background: var(--wonder-teal);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -1px;
+    }
+    .logo-wonder span {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--wonder-teal);
+      letter-spacing: -0.5px;
+    }
+
+    .logo-divider {
+      width: 2px;
+      height: 36px;
+      background: rgba(255,255,255,0.15);
+    }
+
+    /* D.Purple logo replica */
+    .logo-dpurple {
+      display: flex;
+      align-items: center;
+      padding: 8px 12px 8px 16px;
+      border-radius: 0 10px 10px 0;
+      background: rgba(255,255,255,0.07);
+    }
+    .logo-dpurple span {
+      font-size: 18px;
+      font-weight: 900;
+      color: #FFFFFF;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .logo-dpurple span em {
+      color: var(--dpurple-accent);
+      font-style: normal;
+    }
+
+    .logo-x {
+      font-size: 20px;
+      font-weight: 300;
+      color: rgba(255,255,255,0.4);
+      padding: 0 6px;
+    }
+
+    .header-title {
+      text-align: right;
+    }
+    .header-title h1 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.3px;
+    }
+    .header-title p {
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+      margin-top: 2px;
+    }
+
+    /* ── Controls ── */
+    .controls {
+      padding: 20px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .month-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .month-badge select {
+      padding: 8px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      background: #fff;
+      color: var(--text-main);
+      cursor: pointer;
+    }
+    .count-badge {
+      background: var(--dpurple-accent);
+      color: #fff;
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .controls-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .search-box {
+      position: relative;
+    }
+    .search-box input {
+      padding: 8px 14px 8px 36px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 13px;
+      width: 220px;
+      background: #fff;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .search-box input:focus { border-color: var(--wonder-teal); }
+    .search-box::before {
+      content: "🔍";
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 13px;
+    }
+
+    .filter-select {
+      padding: 8px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 13px;
+      background: #fff;
+      color: var(--text-main);
+      cursor: pointer;
+      outline: none;
+    }
+    .filter-select:focus { border-color: var(--wonder-teal); }
+
+    .btn-add {
+      padding: 8px 18px;
+      background: linear-gradient(135deg, var(--wonder-teal), #00A896);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .btn-add:hover { opacity: 0.85; }
+
+    /* ── Stats ── */
+    .stats-bar {
+      padding: 0 32px 20px;
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 22px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 150px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    }
+    .stat-icon { font-size: 24px; }
+    .stat-info label { font-size: 11px; color: var(--text-sub); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+    .stat-info .val { font-size: 22px; font-weight: 800; color: var(--text-main); line-height: 1.1; }
+
+    /* ── Table ── */
+    .table-wrap {
+      padding: 0 32px 40px;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--card-bg);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      min-width: 1100px;
+    }
+
+    thead tr {
+      background: linear-gradient(90deg, var(--dpurple-dark), #2D1060);
+    }
+    thead th {
+      padding: 14px 14px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.75);
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
+    }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #F8FAFF; }
+
+    td {
+      padding: 13px 14px;
+      font-size: 13px;
+      vertical-align: middle;
+    }
+
+    .num-col { width: 40px; text-align: center; color: var(--text-sub); font-weight: 600; }
+
+    /* Category tag */
+    .cat-tag {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    /* Service name */
+    .svc-name { font-weight: 700; font-size: 13px; color: var(--text-main); }
+    .svc-desc { font-size: 11px; color: var(--text-sub); margin-top: 2px; line-height: 1.4; max-width: 200px; }
+
+    /* Target */
+    .target-chip {
+      display: inline-block;
+      background: #EDE9FE;
+      color: #6D28D9;
+      padding: 3px 9px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      margin: 1px;
+      white-space: nowrap;
+    }
+
+    /* Access method */
+    .access-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .access-web { background: #EFF6FF; color: #2563EB; }
+    .access-app { background: #FDF4FF; color: #9333EA; }
+    .access-both { background: #F0FDF4; color: #16A34A; }
+
+    /* Contact info */
+    .contact-info { font-size: 12px; color: var(--text-sub); line-height: 1.6; }
+    .contact-info a { color: var(--dpurple-accent); text-decoration: none; }
+    .contact-info a:hover { text-decoration: underline; }
+
+    /* Status select */
+    .status-wrap { min-width: 120px; }
+    .status-select {
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: 1.5px solid transparent;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      outline: none;
+      width: 100%;
+      transition: all 0.2s;
+    }
+    .status-plan  { background: var(--status-plan);  color: var(--status-plan-text);  border-color: #BFDBFE; }
+    .status-ing   { background: var(--status-ing);   color: var(--status-ing-text);   border-color: #FED7AA; }
+    .status-done  { background: var(--status-done);  color: var(--status-done-text);  border-color: #BBF7D0; }
+
+    .contact-note {
+      margin-top: 6px;
+      width: 100%;
+      padding: 6px 8px;
+      border: 1.5px solid #FED7AA;
+      border-radius: 6px;
+      font-size: 11px;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 52px;
+      background: #FFFBF7;
+      color: var(--text-main);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .contact-note:focus { border-color: #EA580C; }
+    .contact-note::placeholder { color: #CBD5E1; }
+
+    /* Row actions */
+    .btn-del {
+      background: none;
+      border: 1px solid #FECACA;
+      color: #DC2626;
+      border-radius: 6px;
+      padding: 4px 8px;
+      font-size: 11px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-del:hover { background: #FEF2F2; }
+
+    /* ── Modal ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: #fff;
+      border-radius: 16px;
+      padding: 32px;
+      width: 600px;
+      max-width: 95vw;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    .modal h2 {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--dpurple-dark);
+      margin-bottom: 22px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+    .form-group.full { grid-column: 1/-1; }
+    .form-group label { font-size: 12px; font-weight: 700; color: var(--text-sub); text-transform: uppercase; letter-spacing: 0.4px; }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 9px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 13px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus { border-color: var(--wonder-teal); }
+    .form-group textarea { resize: vertical; min-height: 60px; }
+
+    .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 22px; }
+    .btn-cancel {
+      padding: 9px 20px;
+      background: #F1F5F9;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--text-sub);
+    }
+    .btn-save {
+      padding: 9px 24px;
+      background: linear-gradient(135deg, var(--dpurple-accent), var(--dpurple-dark));
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .btn-save:hover { opacity: 0.85; }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 12px;
+      color: var(--text-sub);
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 768px) {
+      header { padding: 14px 16px; }
+      .controls, .stats-bar, .table-wrap { padding-left: 16px; padding-right: 16px; }
+      .header-title h1 { font-size: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<header>
+  <div class="logo-area">
+    <div class="logo-wonder">
+      <div class="icon">ⓦ</div>
+      <span>wonder</span>
+    </div>
+    <span class="logo-x">×</span>
+    <div class="logo-dpurple">
+      <span>D.<em>PURPLE</em></span>
+    </div>
+  </div>
+  <div class="header-title">
+    <h1>원더X디퍼플 제휴처 리스트</h1>
+    <p>롯데손해보험 부업 연계 제휴처 월별 관리 대시보드</p>
+  </div>
+</header>
+
+<!-- ── Controls ── -->
+<div class="controls">
+  <div class="month-badge">
+    <select id="monthSelect" onchange="filterData()">
+      <option value="2026-06">2026년 6월</option>
+      <option value="2026-07">2026년 7월</option>
+      <option value="2026-08">2026년 8월</option>
+    </select>
+    <span class="count-badge" id="countBadge">0 / 30개</span>
+  </div>
+  <div class="controls-right">
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="서비스명, 카테고리 검색…" oninput="filterData()" />
+    </div>
+    <select class="filter-select" id="catFilter" onchange="filterData()">
+      <option value="">전체 카테고리</option>
+      <option value="프리랜서 플랫폼">프리랜서 플랫폼</option>
+      <option value="재능마켓">재능마켓</option>
+      <option value="배달·라이더">배달·라이더</option>
+      <option value="콘텐츠 크리에이터">콘텐츠 크리에이터</option>
+      <option value="온라인 교육">온라인 교육</option>
+      <option value="소호몰·셀러">소호몰·셀러</option>
+      <option value="설문·리서치">설문·리서치</option>
+      <option value="반려동물 서비스">반려동물 서비스</option>
+      <option value="인테리어·생활">인테리어·생활</option>
+      <option value="중고거래">중고거래</option>
+    </select>
+    <select class="filter-select" id="statusFilter" onchange="filterData()">
+      <option value="">전체 상태</option>
+      <option value="예정">컨텍 예정</option>
+      <option value="중">컨텍 중</option>
+      <option value="완료">컨텍 완료</option>
+    </select>
+    <button class="btn-add" onclick="openModal()">+ 제휴처 추가</button>
+  </div>
+</div>
+
+<!-- ── Stats ── -->
+<div class="stats-bar" id="statsBar">
+  <div class="stat-card">
+    <span class="stat-icon">📋</span>
+    <div class="stat-info">
+      <label>전체</label>
+      <div class="val" id="s-total">0</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <span class="stat-icon">📅</span>
+    <div class="stat-info">
+      <label>컨텍 예정</label>
+      <div class="val" id="s-plan">0</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <span class="stat-icon">💬</span>
+    <div class="stat-info">
+      <label>컨텍 중</label>
+      <div class="val" id="s-ing">0</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <span class="stat-icon">✅</span>
+    <div class="stat-info">
+      <label>컨텍 완료</label>
+      <div class="val" id="s-done">0</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Table ── -->
+<div class="table-wrap">
+  <table id="mainTable">
+    <thead>
+      <tr>
+        <th class="num-col">#</th>
+        <th>카테고리</th>
+        <th>접속 방법</th>
+        <th>서비스명 / 설명</th>
+        <th>타겟</th>
+        <th>대표 메일 / 연락처</th>
+        <th style="min-width:160px">컨텍 현황</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+</div>
+
+<!-- ── Add Modal ── -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h2>제휴처 추가</h2>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>카테고리</label>
+        <select id="f-cat">
+          <option value="프리랜서 플랫폼">프리랜서 플랫폼</option>
+          <option value="재능마켓">재능마켓</option>
+          <option value="배달·라이더">배달·라이더</option>
+          <option value="콘텐츠 크리에이터">콘텐츠 크리에이터</option>
+          <option value="온라인 교육">온라인 교육</option>
+          <option value="소호몰·셀러">소호몰·셀러</option>
+          <option value="설문·리서치">설문·리서치</option>
+          <option value="반려동물 서비스">반려동물 서비스</option>
+          <option value="인테리어·생활">인테리어·생활</option>
+          <option value="중고거래">중고거래</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>접속 방법</label>
+        <select id="f-access">
+          <option value="웹">웹</option>
+          <option value="앱">앱</option>
+          <option value="웹+앱">웹+앱</option>
+        </select>
+      </div>
+      <div class="form-group full">
+        <label>서비스명</label>
+        <input type="text" id="f-name" placeholder="예: 크몽" />
+      </div>
+      <div class="form-group full">
+        <label>서비스 설명</label>
+        <textarea id="f-desc" placeholder="서비스에 대한 간략한 설명"></textarea>
+      </div>
+      <div class="form-group full">
+        <label>타겟</label>
+        <input type="text" id="f-target" placeholder="예: 20~40대 프리랜서, N잡러 (쉼표로 구분)" />
+      </div>
+      <div class="form-group">
+        <label>대표 메일</label>
+        <input type="text" id="f-email" placeholder="contact@example.com" />
+      </div>
+      <div class="form-group">
+        <label>연락처</label>
+        <input type="text" id="f-tel" placeholder="02-0000-0000" />
+      </div>
+      <div class="form-group">
+        <label>컨텍 현황</label>
+        <select id="f-status">
+          <option value="예정">컨텍 예정</option>
+          <option value="중">컨텍 중</option>
+          <option value="완료">컨텍 완료</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>월</label>
+        <select id="f-month">
+          <option value="2026-06">2026년 6월</option>
+          <option value="2026-07">2026년 7월</option>
+          <option value="2026-08">2026년 8월</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">취소</button>
+      <button class="btn-save" onclick="saveItem()">저장</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  © 2026 Wonder × D.Purple — 롯데손해보험 NTC 제휴처 관리 시스템 | 월 최대 30개 제휴처 관리
+</footer>
+
+<script>
+// ── Category color map ──
+const catColors = {
+  "프리랜서 플랫폼": { bg: "#EFF6FF", color: "#1D4ED8" },
+  "재능마켓":        { bg: "#FDF4FF", color: "#9333EA" },
+  "배달·라이더":     { bg: "#FFF7ED", color: "#C2410C" },
+  "콘텐츠 크리에이터": { bg: "#FFF1F2", color: "#BE123C" },
+  "온라인 교육":     { bg: "#F0FDF4", color: "#15803D" },
+  "소호몰·셀러":     { bg: "#FEFCE8", color: "#A16207" },
+  "설문·리서치":     { bg: "#F0F9FF", color: "#0369A1" },
+  "반려동물 서비스": { bg: "#FFF7ED", color: "#9A3412" },
+  "인테리어·생활":   { bg: "#F7FEE7", color: "#3F6212" },
+  "중고거래":        { bg: "#F5F3FF", color: "#6D28D9" },
+};
+
+// ── Initial data ──
+let data = [
+  { id:1, month:"2026-06", cat:"프리랜서 플랫폼", access:"웹+앱", name:"크몽", desc:"국내 최대 프리랜서 전문가 마켓. IT·디자인·마케팅 등 다양한 전문가 서비스 거래", target:"20~40대 N잡러, 전문직 부업자", email:"partner@kmong.com", tel:"02-1670-5765", status:"예정", note:"" },
+  { id:2, month:"2026-06", cat:"프리랜서 플랫폼", access:"웹+앱", name:"숨고", desc:"생활·전문 서비스 연결 플랫폼. 레슨·번역·디자인 등 1,000여 종 카테고리 운영", target:"25~45대 부업 희망자, 전문 기술 보유자", email:"business@soomgo.com", tel:"02-6925-4400", status:"예정", note:"" },
+  { id:3, month:"2026-06", cat:"재능마켓", access:"웹+앱", name:"탈잉", desc:"강사와 수강생을 이어주는 재능공유 플랫폼. 온·오프라인 클래스 운영 가능", target:"20~35대 재능 보유 직장인, 강의 부업 희망자", email:"partner@taling.me", tel:"02-1522-3939", status:"중", note:"2026-06-03 첫 메일 발송 완료. 담당자 이민지 과장 회신 대기 중." },
+  { id:4, month:"2026-06", cat:"재능마켓", access:"웹+앱", name:"클래스101", desc:"취미·커리어 중심 온라인 클래스 플랫폼. 크리에이터 수익화 모델 운영", target:"20~40대 전문 지식 보유자, 부업 크리에이터", email:"b2b@class101.net", tel:"02-6956-0101", status:"예정", note:"" },
+  { id:5, month:"2026-06", cat:"배달·라이더", access:"앱", name:"배달의민족(배민커넥트)", desc:"배달 라이더 플랫폼. 자유로운 시간에 음식 배달로 부수입 창출 가능", target:"20~40대 이동 수단 보유자, 유연 근무 희망자", email:"connect@woowahan.com", tel:"1600-0987", status:"완료", note:"" },
+  { id:6, month:"2026-06", cat:"배달·라이더", access:"앱", name:"쿠팡이츠 배달파트너", desc:"쿠팡이츠 라이더 파트너십. 단건 배달 중심으로 건당 수익 구조", target:"20~35대 오토바이·자전거 보유자, 투잡 희망자", email:"partner@coupang.com", tel:"1577-7011", status:"예정", note:"" },
+  { id:7, month:"2026-06", cat:"콘텐츠 크리에이터", access:"웹", name:"브런치스토리", desc:"카카오 운영 글쓰기 플랫폼. 작가 활동을 통한 콘텐츠 수익화 및 브랜딩 가능", target:"25~45대 글쓰기 취미 보유자, 작가 지망생", email:"brunch@kakao.com", tel:"02-6718-1000", status:"중", note:"2026-06-01 파트너십 문의 메일 발송. 담당 부서 확인 중." },
+  { id:8, month:"2026-06", cat:"콘텐츠 크리에이터", access:"앱", name:"네이버 블로그 파트너스퀘어", desc:"네이버 블로그·인플루언서 수익화 지원 프로그램. 광고·협찬 연결", target:"20~45대 블로그·SNS 활동 인플루언서", email:"partner@naver.com", tel:"1588-3820", status:"예정", note:"" },
+  { id:9, month:"2026-06", cat:"온라인 교육", access:"웹+앱", name:"클래스유", desc:"직무·자격증·재테크 온라인 강의 플랫폼. 강사 등록 및 강의 판매 가능", target:"직장인 투잡러, 자격증 취득 희망자", email:"biz@classu.co.kr", tel:"1599-0990", status:"예정", note:"" },
+  { id:10, month:"2026-06", cat:"온라인 교육", access:"웹+앱", name:"유데미 코리아", desc:"글로벌 온라인 강의 플랫폼 한국 서비스. 강사로 등록 시 글로벌 수익 창출 가능", target:"IT·디자인 전문가, 영어 가능 부업 희망자", email:"ko_instructor@udemy.com", tel:"02-538-3900", status:"예정", note:"" },
+  { id:11, month:"2026-06", cat:"소호몰·셀러", access:"웹+앱", name:"스마트스토어(네이버)", desc:"네이버 스마트스토어를 통한 온라인 쇼핑몰 창업 지원. 수수료 0% 혜택 제공", target:"부업으로 쇼핑몰 운영 희망자, 30~50대", email:"storecshelp@naver.com", tel:"1588-3820", status:"완료", note:"" },
+  { id:12, month:"2026-06", cat:"소호몰·셀러", access:"앱", name:"아이디어스", desc:"핸드메이드·수공예 작가 전문 마켓. 직접 제작한 제품 판매 가능", target:"공예·DIY 취미 보유 여성 20~40대", email:"partners@idus.com", tel:"02-6080-0307", status:"예정", note:"" },
+  { id:13, month:"2026-06", cat:"설문·리서치", access:"웹+앱", name:"엠브레인 패널파워", desc:"국내 최대 리서치 패널 플랫폼. 설문 참여로 포인트 적립 및 현금 전환 가능", target:"모든 연령대, 설문 참여로 소소한 부수입 희망자", email:"panel@embrain.com", tel:"02-3483-5100", status:"예정", note:"" },
+  { id:14, month:"2026-06", cat:"설문·리서치", access:"앱", name:"캐시워크", desc:"걷기·설문·광고 시청으로 캐시 적립 가능한 생활형 리워드 앱", target:"전 연령대, 일상 속 소액 부수입 희망자", email:"biz@cashwalk.co.kr", tel:"02-563-0404", status:"중", note:"2026-06-04 B2B 파트너십 페이지를 통해 제안서 제출. 검토 기간 약 2주 소요 예정." },
+  { id:15, month:"2026-06", cat:"반려동물 서비스", access:"앱", name:"펫트너", desc:"반려동물 돌봄 매칭 플랫폼. 펫시터·훈련사 등록 후 부업 가능", target:"반려동물 경험자, 20~40대 동물 애호가", email:"biz@petnner.com", tel:"070-4100-7900", status:"예정", note:"" },
+  { id:16, month:"2026-06", cat:"반려동물 서비스", access:"앱", name:"도그메이트", desc:"강아지 돌봄 전문 O2O 플랫폼. 도그시터 등록 후 시간당 수익 창출 가능", target:"20~35대 반려동물 보유자, 플렉시블 스케줄 희망자", email:"partner@dogmate.co.kr", tel:"070-4200-8000", status:"예정", note:"" },
+  { id:17, month:"2026-06", cat:"인테리어·생활", access:"웹+앱", name:"오늘의집", desc:"인테리어 콘텐츠·쇼핑 플랫폼. 전문가 등록 후 인테리어 서비스 판매 가능", target:"인테리어 전문가·시공 기술 보유자", email:"b2b@bucketplace.co.kr", tel:"02-6925-1004", status:"예정", note:"" },
+  { id:18, month:"2026-06", cat:"인테리어·생활", access:"앱", name:"당근(지역광고)", desc:"지역 기반 당근 앱 내 광고를 통해 부업 서비스 홍보 및 고객 유치 가능", target:"지역 밀착 서비스 운영 1인 사업자", email:"biz@daangn.com", tel:"1522-8855", status:"예정", note:"" },
+  { id:19, month:"2026-06", cat:"중고거래", access:"앱", name:"번개장터", desc:"모바일 중고거래 플랫폼. 셀러 계정을 통한 중고 상품 판매 부업 가능", target:"20~35대 중고 상품 거래 희망자, 구제샵 운영자", email:"partner@bunjang.co.kr", tel:"02-6718-5000", status:"완료", note:"" },
+  { id:20, month:"2026-06", cat:"중고거래", access:"앱", name:"중고나라", desc:"국내 최대 규모 중고거래 커뮤니티 앱. 정기 판매자 등록 후 매출 관리 가능", target:"30~50대 중고 물품 판매 희망자", email:"biz@joonggonara.co.kr", tel:"1644-5884", status:"예정", note:"" },
+  { id:21, month:"2026-06", cat:"프리랜서 플랫폼", access:"웹", name:"위시켓", desc:"국내 IT 프리랜서 프로젝트 매칭 전문 플랫폼. 개발·디자인 프로젝트 수주 가능", target:"IT 개발자·디자이너 프리랜서, 30~45대", email:"partner@wishket.com", tel:"02-1600-0055", status:"예정", note:"" },
+  { id:22, month:"2026-06", cat:"콘텐츠 크리에이터", access:"웹+앱", name:"카카오 뷰", desc:"카카오 뷰 채널 운영을 통한 콘텐츠 큐레이션 수익화. 창작자 보상 프로그램 운영", target:"미디어 콘텐츠 제작 관심자, 20~40대", email:"kakaoview@kakao.com", tel:"02-6718-1000", status:"예정", note:"" },
+  { id:23, month:"2026-06", cat:"온라인 교육", access:"웹+앱", name:"패스트캠퍼스 강사", desc:"IT·비즈니스 전문 교육 플랫폼. 전문가 강사 등록 후 온라인 강의 수익화", target:"현직 실무자, 5년 이상 경력 전문가", email:"instructor@fastcampus.co.kr", tel:"02-521-8001", status:"예정", note:"" },
+  { id:24, month:"2026-06", cat:"설문·리서치", access:"웹", name:"서베이몽키 패널", desc:"글로벌 설문조사 플랫폼. 설문 응답 패널 등록 후 리워드 수령 가능", target:"전 연령대, 설문 참여 소득 희망자", email:"kr_support@surveymonkey.com", tel:"02-3479-7000", status:"예정", note:"" },
+  { id:25, month:"2026-06", cat:"소호몰·셀러", access:"웹+앱", name:"카카오쇼핑 라이브", desc:"카카오 쇼핑 라이브 채널 셀러 등록. 라이브 커머스를 통한 상품 판매 부업", target:"상품 보유 소상공인·개인 판매자, 30~50대", email:"shoplive@kakao.com", tel:"1588-3470", status:"예정", note:"" },
+  { id:26, month:"2026-06", cat:"재능마켓", access:"웹+앱", name:"오투잡", desc:"번역·디자인·영상 편집 등 소액 과외 및 재능 판매 플랫폼", target:"20~40대 전문 기술 보유자, 소규모 작업 판매자", email:"cs@o2job.co.kr", tel:"1544-0606", status:"예정", note:"" },
+  { id:27, month:"2026-06", cat:"배달·라이더", access:"앱", name:"생각대로(라이더)", desc:"편의점 배달 특화 라이더 플랫폼. CU·GS25 연계 배달 파트너 모집", target:"20~40대 자전거·오토바이 이용 가능자", email:"rider@bgfretail.com", tel:"080-023-5252", status:"예정", note:"" },
+  { id:28, month:"2026-06", cat:"인테리어·생활", access:"앱", name:"청소연구소", desc:"홈클리닝 O2O 플랫폼. 청소 매니저 등록 후 시간제 부업 가능", target:"가사 서비스 경험자, 30~50대 주부·부업 희망자", email:"partner@cleaninglab.co.kr", tel:"1644-4849", status:"예정", note:"" },
+  { id:29, month:"2026-06", cat:"반려동물 서비스", access:"앱", name:"러브펫", desc:"반려동물 미용·훈련·호텔 전문 매칭 앱. 펫 전문가 파트너 등록 가능", target:"반려동물 전문 기술 보유자, 20~40대", email:"biz@lovepet.co.kr", tel:"070-5050-9090", status:"예정", note:"" },
+  { id:30, month:"2026-06", cat:"콘텐츠 크리에이터", access:"웹+앱", name:"포스타입", desc:"웹소설·웹툰·에세이 독립 창작자 플랫폼. 정기 구독 모델로 안정적 수익 창출", target:"20~40대 창작 활동가, 스토리·일러스트 작가", email:"partner@postype.com", tel:"02-565-1500", status:"예정", note:"" },
+];
+
+let nextId = 31;
+
+function getCatStyle(cat) {
+  const c = catColors[cat] || { bg: "#F1F5F9", color: "#475569" };
+  return `background:${c.bg};color:${c.color}`;
+}
+
+function getAccessClass(access) {
+  if (access === "웹") return "access-web";
+  if (access === "앱") return "access-app";
+  return "access-both";
+}
+
+function statusClass(s) {
+  if (s === "예정") return "status-plan";
+  if (s === "중") return "status-ing";
+  return "status-done";
+}
+function statusLabel(s) {
+  if (s === "예정") return "컨텍 예정";
+  if (s === "중") return "컨텍 중";
+  return "컨텍 완료";
+}
+
+function renderTargets(t) {
+  return t.split(",").map(x => `<span class="target-chip">${x.trim()}</span>`).join(" ");
+}
+
+function filterData() {
+  const month = document.getElementById("monthSelect").value;
+  const q = document.getElementById("searchInput").value.toLowerCase();
+  const cat = document.getElementById("catFilter").value;
+  const st = document.getElementById("statusFilter").value;
+
+  let filtered = data.filter(d => {
+    if (d.month !== month) return false;
+    if (cat && d.cat !== cat) return false;
+    if (st && d.status !== st) return false;
+    if (q && !d.name.toLowerCase().includes(q) && !d.cat.toLowerCase().includes(q) && !d.desc.toLowerCase().includes(q)) return false;
+    return true;
+  });
+
+  renderTable(filtered);
+  updateStats(filtered);
+}
+
+function renderTable(items) {
+  const tbody = document.getElementById("tableBody");
+  tbody.innerHTML = "";
+  document.getElementById("countBadge").textContent = `${items.length} / 30개`;
+
+  items.forEach((item, idx) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td class="num-col">${idx + 1}</td>
+      <td><span class="cat-tag" style="${getCatStyle(item.cat)}">${item.cat}</span></td>
+      <td><span class="access-badge ${getAccessClass(item.access)}">${item.access === "웹" ? "🌐" : item.access === "앱" ? "📱" : "🌐📱"} ${item.access}</span></td>
+      <td>
+        <div class="svc-name">${item.name}</div>
+        <div class="svc-desc">${item.desc}</div>
+      </td>
+      <td>${renderTargets(item.target)}</td>
+      <td class="contact-info">
+        ${item.email ? `<a href="mailto:${item.email}">✉️ ${item.email}</a><br>` : ""}
+        ${item.tel ? `📞 ${item.tel}` : ""}
+      </td>
+      <td class="status-wrap">
+        <select class="status-select ${statusClass(item.status)}"
+                onchange="changeStatus(${item.id}, this.value, this)">
+          <option value="예정" ${item.status==="예정"?"selected":""}>컨텍 예정</option>
+          <option value="중"   ${item.status==="중"?"selected":""}>컨텍 중</option>
+          <option value="완료" ${item.status==="완료"?"selected":""}>컨텍 완료</option>
+        </select>
+        ${item.status === "중" ? `
+          <textarea class="contact-note" placeholder="컨텍 내용을 입력하세요…"
+                    oninput="updateNote(${item.id}, this.value)">${item.note}</textarea>
+        ` : ""}
+      </td>
+      <td><button class="btn-del" onclick="deleteItem(${item.id})">삭제</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function updateStats(items) {
+  document.getElementById("s-total").textContent = items.length;
+  document.getElementById("s-plan").textContent = items.filter(d => d.status === "예정").length;
+  document.getElementById("s-ing").textContent = items.filter(d => d.status === "중").length;
+  document.getElementById("s-done").textContent = items.filter(d => d.status === "완료").length;
+}
+
+function changeStatus(id, val, sel) {
+  const item = data.find(d => d.id === id);
+  if (!item) return;
+  item.status = val;
+  sel.className = `status-select ${statusClass(val)}`;
+  // toggle note textarea
+  const wrap = sel.closest(".status-wrap");
+  const existing = wrap.querySelector(".contact-note");
+  if (val === "중" && !existing) {
+    const ta = document.createElement("textarea");
+    ta.className = "contact-note";
+    ta.placeholder = "컨텍 내용을 입력하세요…";
+    ta.value = item.note || "";
+    ta.oninput = function() { updateNote(id, this.value); };
+    wrap.appendChild(ta);
+  } else if (val !== "중" && existing) {
+    existing.remove();
+  }
+  // re-calc stats
+  const month = document.getElementById("monthSelect").value;
+  const filtered = data.filter(d => d.month === month);
+  updateStats(filtered);
+  document.getElementById("countBadge").textContent = `${filtered.length} / 30개`;
+}
+
+function updateNote(id, val) {
+  const item = data.find(d => d.id === id);
+  if (item) item.note = val;
+}
+
+function deleteItem(id) {
+  if (!confirm("해당 제휴처를 삭제하시겠습니까?")) return;
+  data = data.filter(d => d.id !== id);
+  filterData();
+}
+
+function openModal() {
+  document.getElementById("modalOverlay").classList.add("open");
+}
+function closeModal() {
+  document.getElementById("modalOverlay").classList.remove("open");
+}
+
+function saveItem() {
+  const name = document.getElementById("f-name").value.trim();
+  if (!name) { alert("서비스명을 입력해주세요."); return; }
+
+  const month = document.getElementById("f-month").value;
+  const monthData = data.filter(d => d.month === month);
+  if (monthData.length >= 30) { alert("해당 월의 제휴처는 최대 30개까지 등록 가능합니다."); return; }
+
+  data.push({
+    id: nextId++,
+    month,
+    cat: document.getElementById("f-cat").value,
+    access: document.getElementById("f-access").value,
+    name,
+    desc: document.getElementById("f-desc").value.trim(),
+    target: document.getElementById("f-target").value.trim(),
+    email: document.getElementById("f-email").value.trim(),
+    tel: document.getElementById("f-tel").value.trim(),
+    status: document.getElementById("f-status").value,
+    note: "",
+  });
+
+  // switch to the month we just added
+  document.getElementById("monthSelect").value = month;
+  closeModal();
+  filterData();
+
+  // reset form
+  ["f-name","f-desc","f-target","f-email","f-tel"].forEach(id => document.getElementById(id).value = "");
+}
+
+// close modal on overlay click
+document.getElementById("modalOverlay").addEventListener("click", function(e) {
+  if (e.target === this) closeModal();
+});
+
+// ── Init ──
+filterData();
+</script>
+</body>
+</html>
