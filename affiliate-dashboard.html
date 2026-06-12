@@ -20,6 +20,8 @@
       --status-ing-text: #EA580C;
       --status-done: #F0FDF4;
       --status-done-text: #16A34A;
+      --status-fail: #FEF2F2;
+      --status-fail-text: #DC2626;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -140,25 +142,59 @@
       display: flex;
       align-items: center;
       gap: 10px;
+      background: linear-gradient(135deg, #EAFBF8, #F3EEFF);
+      border: 1px solid #CFFAF2;
+      border-radius: 14px;
+      padding: 8px 12px;
+      box-shadow: 0 2px 10px rgba(0,201,177,0.12);
+    }
+    .month-label {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--dpurple-accent);
+      letter-spacing: 0.3px;
+      white-space: nowrap;
     }
     .month-badge select {
-      padding: 8px 14px;
-      border: 1.5px solid var(--border);
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 600;
+      padding: 11px 20px;
+      border: 2px solid var(--wonder-teal);
+      border-radius: 10px;
+      font-size: 17px;
+      font-weight: 800;
       background: #fff;
-      color: var(--text-main);
+      color: var(--dpurple-dark);
       cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,201,177,0.20);
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
+    .month-badge select:hover { border-color: var(--dpurple-accent); }
+    .month-badge select:focus { outline: none; border-color: var(--dpurple-accent); box-shadow: 0 0 0 4px rgba(123,47,190,0.15); }
     .count-badge {
       background: var(--dpurple-accent);
       color: #fff;
-      padding: 5px 14px;
+      padding: 6px 15px;
       border-radius: 20px;
       font-size: 13px;
-      font-weight: 700;
+      font-weight: 800;
+      box-shadow: 0 2px 8px rgba(123,47,190,0.25);
     }
+
+    /* ── Excel export ── */
+    .btn-excel {
+      padding: 8px 16px;
+      border: 1.5px solid #16A34A;
+      background: #fff;
+      color: #15803D;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-family: inherit;
+      white-space: nowrap;
+    }
+    .btn-excel:hover { background: #F0FDF4; box-shadow: 0 2px 8px rgba(22,163,74,0.18); }
+    .tab-toolbar { display: flex; justify-content: flex-end; margin-bottom: 14px; }
 
     .controls-right {
       display: flex;
@@ -343,6 +379,7 @@
     .status-plan  { background: var(--status-plan);  color: var(--status-plan-text);  border-color: #BFDBFE; }
     .status-ing   { background: var(--status-ing);   color: var(--status-ing-text);   border-color: #FED7AA; }
     .status-done  { background: var(--status-done);  color: var(--status-done-text);  border-color: #BBF7D0; }
+    .status-fail  { background: var(--status-fail);  color: var(--status-fail-text);  border-color: #FECACA; }
 
     .contact-note {
       margin-top: 6px;
@@ -461,10 +498,365 @@
       border-top: 1px solid var(--border);
     }
 
+    /* ── Tabs ── */
+    .tab-nav {
+      display: flex;
+      gap: 4px;
+      padding: 14px 32px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .tab-btn {
+      padding: 12px 22px;
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-sub);
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+    .tab-btn:hover { color: var(--text-main); }
+    .tab-btn.active { color: var(--dpurple-accent); border-bottom-color: var(--dpurple-accent); }
+    .tab-count {
+      display: inline-block;
+      margin-left: 6px;
+      background: #CBD5E1;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 1px 8px;
+      border-radius: 10px;
+    }
+    .tab-btn.active .tab-count { background: var(--dpurple-accent); }
+
+    /* ── Pipeline ── */
+    .pipeline-wrap { padding: 24px 32px 40px; }
+    .pipeline-empty {
+      text-align: center;
+      padding: 70px 20px;
+      color: var(--text-sub);
+      font-size: 14px;
+      background: var(--card-bg);
+      border: 1px dashed var(--border);
+      border-radius: 14px;
+    }
+    .pipeline-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(440px, 1fr));
+      gap: 18px;
+    }
+    .pl-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px 22px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+    .pl-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .pl-title { font-size: 16px; font-weight: 800; color: var(--text-main); }
+    .pl-sub { font-size: 11px; color: var(--text-sub); margin-top: 3px; }
+    .pl-stage-tag {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      background: var(--dpurple-accent);
+      color: #fff;
+      white-space: nowrap;
+    }
+
+    /* Stepper */
+    .stepper {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+    .step {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 7px;
+      position: relative;
+      cursor: pointer;
+    }
+    .step-dot {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 800;
+      background: #E2E8F0;
+      color: #94A3B8;
+      border: 2px solid #E2E8F0;
+      z-index: 1;
+      transition: all 0.2s;
+    }
+    .step-label { font-size: 11px; font-weight: 700; color: var(--text-sub); text-align: center; line-height: 1.3; }
+    .step-line {
+      position: absolute;
+      top: 15px;
+      left: -50%;
+      width: 100%;
+      height: 2px;
+      background: #E2E8F0;
+      z-index: 0;
+    }
+    .step:first-child .step-line { display: none; }
+    .step.done .step-dot { background: var(--wonder-teal); color: #fff; border-color: var(--wonder-teal); }
+    .step.done .step-line { background: var(--wonder-teal); }
+    .step.current .step-dot { background: var(--dpurple-accent); color: #fff; border-color: var(--dpurple-accent); box-shadow: 0 0 0 4px rgba(123,47,190,0.15); }
+    .step.current .step-label { color: var(--dpurple-accent); }
+
+    /* Stage memos */
+    .stage-memos { display: flex; flex-direction: column; gap: 12px; }
+    .stage-memo-item label {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-sub);
+      margin-bottom: 5px;
+    }
+    .stage-memo-item .badge-num {
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      background: #E2E8F0; color: #94A3B8;
+      font-size: 10px; font-weight: 800;
+      display: inline-flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .stage-memo-item.done label .badge-num { background: var(--wonder-teal); color: #fff; }
+    .stage-memo-item.current label .badge-num { background: var(--dpurple-accent); color: #fff; }
+    .stage-memo-item.current label { color: var(--dpurple-accent); }
+    .stage-memo-item textarea {
+      width: 100%;
+      padding: 9px 11px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 12px;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 46px;
+      outline: none;
+      transition: border-color 0.2s;
+      color: var(--text-main);
+    }
+    .stage-memo-item textarea:focus { border-color: var(--wonder-teal); }
+    .stage-memo-item textarea::placeholder { color: #CBD5E1; }
+
+    /* ── Matrix (컨텍 진행 관리) ── */
+    .matrix-scroll { overflow-x: auto; border-radius: 14px; }
+    table.matrix {
+      border-collapse: separate;
+      border-spacing: 0;
+      width: 100%;
+      min-width: 900px;
+      background: var(--card-bg);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    }
+    table.matrix th, table.matrix td { border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); }
+    table.matrix thead th {
+      background: linear-gradient(90deg, var(--dpurple-dark), #2D1060);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 14px 12px;
+      text-align: center;
+      white-space: nowrap;
+    }
+    .mtx-step-num {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: rgba(255,255,255,0.2); margin-right: 6px; font-size: 11px;
+    }
+    .mtx-corner { text-align: left !important; position: sticky; left: 0; z-index: 3; min-width: 190px; }
+    .mtx-row-head {
+      position: sticky; left: 0; z-index: 1;
+      background: #F8FAFF;
+      text-align: left;
+      padding: 12px 14px;
+      vertical-align: top;
+      min-width: 190px;
+    }
+    .mtx-name { font-size: 14px; font-weight: 800; color: var(--text-main); margin-bottom: 6px; }
+    .mtx-cat { margin-bottom: 6px; }
+    .mtx-cur { font-size: 11px; color: var(--text-sub); }
+    .mtx-cur strong { color: var(--dpurple-accent); }
+    .mtx-cell { padding: 10px; vertical-align: top; min-width: 170px; background: #fff; transition: background 0.2s; }
+    .mtx-cell.done { background: #F0FDFB; }
+    .mtx-cell.current { background: #FAF5FF; box-shadow: inset 0 0 0 2px var(--dpurple-accent); }
+    .stage-mark {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 24px; height: 24px; border-radius: 50%;
+      border: 1.5px solid var(--border); background: #fff; color: #94A3B8;
+      font-size: 12px; cursor: pointer; margin-bottom: 8px; transition: all 0.2s;
+    }
+    .stage-mark:hover { border-color: var(--dpurple-accent); }
+    .mtx-cell.done .stage-mark { background: var(--wonder-teal); border-color: var(--wonder-teal); color: #fff; }
+    .mtx-cell.current .stage-mark { background: var(--dpurple-accent); border-color: var(--dpurple-accent); color: #fff; }
+    .mtx-memo {
+      width: 100%; padding: 8px 10px; border: 1.5px solid var(--border); border-radius: 8px;
+      font-size: 12px; font-family: inherit; resize: vertical; min-height: 60px; outline: none;
+      color: var(--text-main); transition: border-color 0.2s; display: block;
+    }
+    .mtx-memo:focus { border-color: var(--wonder-teal); min-height: 120px; }
+    .mtx-memo::placeholder { color: #CBD5E1; }
+    .memo-wrap { position: relative; }
+    .memo-wrap .mtx-memo { padding-right: 30px; }
+    .memo-expand {
+      position: absolute; top: 5px; right: 5px; z-index: 2;
+      width: 22px; height: 22px; border-radius: 6px; padding: 0;
+      border: 1px solid var(--border); background: rgba(255,255,255,0.92);
+      color: var(--text-sub); font-size: 13px; cursor: pointer; line-height: 1;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .memo-expand:hover { background: #fff; border-color: var(--dpurple-accent); color: var(--dpurple-accent); }
+
+    /* ── Stage Bar Chart (전체 리스트) ── */
+    .chart-wrap {
+      margin: 0 32px 22px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px 22px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    }
+    .chart-title {
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+      font-size: 14px; font-weight: 800; color: var(--text-main); margin-bottom: 14px;
+    }
+    .chart-legend { display: flex; gap: 14px; font-size: 11px; font-weight: 600; color: var(--text-sub); }
+    .chart-legend span { display: inline-flex; align-items: center; gap: 5px; }
+    .lg { width: 11px; height: 11px; border-radius: 3px; display: inline-block; }
+    .lg-plan { background: #E2E8F0; }
+    .lg-ing { background: var(--dpurple-accent); }
+    .lg-done { background: var(--wonder-teal); }
+    .chart-stage-head, .bar-row { display: grid; grid-template-columns: 150px 1fr 92px; align-items: center; gap: 12px; }
+    .chart-stage-head { margin-bottom: 8px; }
+    .chart-stage-head .bar-track-head { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+    .chart-stage-head .bar-track-head span { font-size: 10px; font-weight: 700; color: var(--text-sub); text-align: center; }
+    .chart-body { max-height: 340px; overflow-y: auto; display: flex; flex-direction: column; gap: 7px; }
+    .bar-name { font-size: 12px; font-weight: 700; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .bar-track { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+    .bar-seg { height: 16px; border-radius: 4px; background: #E2E8F0; transition: background 0.2s; }
+    .bar-seg.done { background: var(--wonder-teal); }
+    .bar-seg.current { background: var(--dpurple-accent); }
+    .bar-label { font-size: 11px; font-weight: 700; text-align: right; white-space: nowrap; }
+    .lbl-plan { color: var(--status-plan-text); }
+    .lbl-ing { color: var(--dpurple-accent); }
+    .lbl-done { color: var(--status-done-text); }
+    .chart-empty { text-align: center; color: var(--text-sub); font-size: 13px; padding: 20px; }
+
+    /* ── Monthly stacked bar (전체 리스트) ── */
+    .lg-plan2 { background: #2563EB; }
+    .lg-ing2  { background: #EA580C; }
+    .lg-confirm2 { background: #16A34A; }
+    .lg-fail2 { background: #DC2626; }
+    .mbar-row { display: grid; grid-template-columns: 110px 1fr 92px; align-items: center; gap: 14px; padding: 7px 0; }
+    .mbar-month { font-size: 13px; font-weight: 800; color: var(--text-main); }
+    .mbar-track { display: flex; height: 30px; background: #F1F5F9; border-radius: 8px; overflow: hidden; }
+    .mseg { display: flex; align-items: center; justify-content: center; color: #fff; font-size: 12px; font-weight: 700; min-width: 0; transition: width 0.3s; }
+    .mseg.seg-plan { background: #2563EB; }
+    .mseg.seg-ing  { background: #EA580C; }
+    .mseg.seg-confirm { background: #16A34A; }
+    .mseg.seg-fail { background: #DC2626; }
+    .mbar-total { font-size: 12px; font-weight: 700; color: var(--text-sub); text-align: right; }
+
+    /* ── Result badge (확정/실패) ── */
+    .result-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 800; white-space: nowrap; }
+    .result-confirm { background: var(--status-done); color: var(--status-done-text); border: 1px solid #BBF7D0; }
+    .result-fail { background: var(--status-fail); color: var(--status-fail-text); border: 1px solid #FECACA; }
+
+    /* ── Pipeline outcome cell (완료 단계) ── */
+    .outcome-btns { display: flex; gap: 6px; margin-bottom: 8px; }
+    .outcome-btn {
+      flex: 1; padding: 6px 8px; border-radius: 7px; border: 1.5px solid var(--border);
+      background: #fff; font-size: 11px; font-weight: 800; cursor: pointer; color: var(--text-sub);
+      transition: all 0.15s; font-family: inherit;
+    }
+    .outcome-btn.confirm:hover, .outcome-btn.confirm.on { background: var(--status-done); color: var(--status-done-text); border-color: #86EFAC; }
+    .outcome-btn.fail:hover, .outcome-btn.fail.on { background: var(--status-fail); color: var(--status-fail-text); border-color: #FCA5A5; }
+
+    /* ── Next-month tab ── */
+    .nm-wrap { padding: 24px 32px 40px; }
+    .nm-head {
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+      margin-bottom: 16px;
+    }
+    .nm-title { font-size: 16px; font-weight: 800; color: var(--text-main); }
+    .nm-title strong { color: var(--dpurple-accent); }
+    .nm-sub { font-size: 12px; color: var(--text-sub); margin-top: 3px; }
+    .btn-update {
+      padding: 10px 22px; border: none; border-radius: 9px; cursor: pointer;
+      font-size: 13px; font-weight: 800; color: #fff;
+      background: linear-gradient(135deg, var(--wonder-teal), #00A896);
+      transition: opacity 0.2s;
+    }
+    .btn-update:hover { opacity: 0.88; }
+    .nm-banner {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 16px; border-radius: 10px; font-size: 13px; font-weight: 700; margin-bottom: 16px;
+    }
+    .nm-banner.due { background: #FEF3C7; color: #92400E; border: 1px solid #FCD34D; }
+    .nm-banner.wait { background: #EFF6FF; color: #1E40AF; border: 1px solid #BFDBFE; }
+    .nm-section-label {
+      font-size: 12px; font-weight: 800; color: var(--text-sub); text-transform: uppercase; letter-spacing: 0.5px;
+      margin: 18px 0 10px; display: flex; align-items: center; gap: 8px;
+    }
+    .nm-section-label .pill { background: var(--dpurple-accent); color: #fff; border-radius: 12px; padding: 1px 9px; font-size: 11px; }
+    .nm-section-label.carry .pill { background: #EA580C; }
+    .nm-empty { text-align: center; color: var(--text-sub); font-size: 14px; padding: 50px 20px; background: var(--card-bg); border: 1px dashed var(--border); border-radius: 14px; }
+    .nm-note { font-size: 12px; color: var(--status-fail-text); font-weight: 700; margin-top: 10px; }
+    .nm-poolstat { font-size: 12px; color: var(--text-sub); font-weight: 600; margin-bottom: 14px; padding: 8px 14px; background: #F8FAFC; border: 1px solid var(--border); border-radius: 8px; }
+    .carry-tag { display: inline-block; background: #FFF7ED; color: #C2410C; border: 1px solid #FED7AA; border-radius: 6px; padding: 1px 7px; font-size: 10px; font-weight: 700; margin-left: 6px; }
+
+    /* ── Done table (컨텍 완료) ── */
+    .done-table {
+      width: 100%; min-width: 760px;
+      border-collapse: separate; border-spacing: 0;
+      background: var(--card-bg);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    }
+    .done-table th, .done-table td { border-bottom: 1px solid var(--border); padding: 12px 14px; text-align: left; vertical-align: top; }
+    .done-table thead th {
+      background: linear-gradient(90deg, var(--dpurple-dark), #2D1060);
+      color: #fff; font-size: 12px; font-weight: 700; white-space: nowrap;
+    }
+    .done-name-cell { min-width: 180px; }
+    .done-month {
+      padding: 8px 10px; border: 1.5px solid var(--border); border-radius: 8px;
+      font-size: 12px; font-family: inherit; outline: none; color: var(--text-main);
+    }
+    .done-month:focus { border-color: var(--wonder-teal); }
+    .done-memo {
+      width: 100%; min-width: 280px; padding: 9px 11px;
+      border: 1.5px solid var(--border); border-radius: 8px;
+      font-size: 12px; font-family: inherit; resize: vertical; min-height: 60px;
+      outline: none; color: var(--text-main); transition: border-color 0.2s;
+    }
+    .done-memo:focus { border-color: var(--wonder-teal); }
+    .done-memo::placeholder { color: #CBD5E1; }
+
     @media (max-width: 768px) {
       header { padding: 14px 16px; }
-      .controls, .stats-bar, .table-wrap { padding-left: 16px; padding-right: 16px; }
+      .controls, .stats-bar, .table-wrap, .tab-nav, .pipeline-wrap { padding-left: 16px; padding-right: 16px; }
+      .chart-wrap { margin-left: 16px; margin-right: 16px; }
       .header-title h1 { font-size: 14px; }
+      .mbar-row { grid-template-columns: 74px 1fr 64px; gap: 8px; }
     }
   </style>
 </head>
@@ -488,9 +880,21 @@
   </div>
 </header>
 
+<!-- ── Tab Nav ── -->
+<div class="tab-nav">
+  <button class="tab-btn active" id="tabBtnList" onclick="switchTab('list')">전체 리스트</button>
+  <button class="tab-btn" id="tabBtnPipeline" onclick="switchTab('pipeline')">컨텍 진행 관리<span class="tab-count" id="pipelineCount">0</span></button>
+  <button class="tab-btn" id="tabBtnDone" onclick="switchTab('done')">컨텍 종료<span class="tab-count" id="doneCount">0</span></button>
+  <button class="tab-btn" id="tabBtnNext" onclick="switchTab('next')">차월 제휴처 📅</button>
+</div>
+
+<!-- ── Tab: List ── -->
+<div id="tab-list">
+
 <!-- ── Controls ── -->
 <div class="controls">
   <div class="month-badge">
+    <span class="month-label">📅 관리 월</span>
     <select id="monthSelect" onchange="filterData()">
       <option value="2026-06">2026년 6월</option>
       <option value="2026-07">2026년 7월</option>
@@ -519,8 +923,10 @@
       <option value="">전체 상태</option>
       <option value="예정">컨텍 예정</option>
       <option value="중">컨텍 중</option>
-      <option value="완료">컨텍 완료</option>
+      <option value="확정">집행 확정</option>
+      <option value="실패">실패</option>
     </select>
+    <button class="btn-excel" onclick="exportList()">⬇ 엑셀 다운로드</button>
     <button class="btn-add" onclick="openModal()">+ 제휴처 추가</button>
   </div>
 </div>
@@ -551,10 +957,31 @@
   <div class="stat-card">
     <span class="stat-icon">✅</span>
     <div class="stat-info">
-      <label>컨텍 완료</label>
-      <div class="val" id="s-done">0</div>
+      <label>집행 확정</label>
+      <div class="val" id="s-confirm">0</div>
     </div>
   </div>
+  <div class="stat-card">
+    <span class="stat-icon">❌</span>
+    <div class="stat-info">
+      <label>실패</label>
+      <div class="val" id="s-fail">0</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Monthly Stacked Chart ── -->
+<div class="chart-wrap">
+  <div class="chart-title">
+    <span>📊 월별 컨텍 현황 (누적)</span>
+    <div class="chart-legend">
+      <span><i class="lg lg-plan2"></i>컨텍 예정</span>
+      <span><i class="lg lg-ing2"></i>컨텍 중</span>
+      <span><i class="lg lg-confirm2"></i>집행 확정</span>
+      <span><i class="lg lg-fail2"></i>실패</span>
+    </div>
+  </div>
+  <div class="chart-body" id="chartBody"></div>
 </div>
 
 <!-- ── Table ── -->
@@ -574,6 +1001,52 @@
     </thead>
     <tbody id="tableBody"></tbody>
   </table>
+</div>
+
+</div><!-- /tab-list -->
+
+<!-- ── Tab: Pipeline ── -->
+<div id="tab-pipeline" style="display:none;">
+  <div class="pipeline-wrap">
+    <div class="tab-toolbar"><button class="btn-excel" onclick="exportPipeline()">⬇ 엑셀 다운로드</button></div>
+    <div class="pipeline-empty" id="pipelineEmpty" style="display:none;">
+      현재 월에 <strong>컨텍 중</strong>으로 표시된 제휴처가 없습니다.<br>
+      전체 리스트에서 컨텍 현황을 <strong>"컨텍 중"</strong>으로 변경하면 이곳에서 단계별로 관리할 수 있습니다.
+    </div>
+    <div class="matrix-scroll" id="pipelineGrid"></div>
+  </div>
+</div>
+
+<!-- ── Tab: Done (컨텍 종료) ── -->
+<div id="tab-done" style="display:none;">
+  <div class="pipeline-wrap">
+    <div class="tab-toolbar"><button class="btn-excel" onclick="exportDone()">⬇ 엑셀 다운로드</button></div>
+    <div class="pipeline-empty" id="doneEmpty" style="display:none;">
+      현재 월에 <strong>집행 확정</strong> 또는 <strong>실패</strong>로 종료된 제휴처가 없습니다.<br>
+      전체 리스트 또는 컨텍 진행 관리에서 결과를 <strong>"집행 확정"·"실패"</strong>로 지정하면 이곳에서 종료 월·세부 내용을 관리할 수 있습니다.
+    </div>
+    <div class="matrix-scroll" id="doneGrid"></div>
+  </div>
+</div>
+
+<!-- ── Tab: Next Month (차월 제휴처) ── -->
+<div id="tab-next" style="display:none;">
+  <div class="nm-wrap">
+    <div class="nm-head">
+      <div>
+        <div class="nm-title"><strong id="nmMonthLabel">차월</strong> 제휴 매체 리스트</div>
+        <div class="nm-sub" id="nmSub">금월 컨텍 중·예정 매체는 상단에 이월하고, 그 아래 신규 매체 30개를 불러옵니다.</div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <button class="btn-excel" onclick="exportNext()">⬇ 엑셀 다운로드</button>
+        <button class="btn-add" onclick="openPoolModal()">+ 후보 매체 추가</button>
+        <button class="btn-update" onclick="generateNextMonth()">🔄 리스트 업데이트</button>
+      </div>
+    </div>
+    <div class="nm-banner wait" id="nmBanner"></div>
+    <div class="nm-poolstat" id="nmPoolStat"></div>
+    <div id="nmBody"></div>
+  </div>
 </div>
 
 <!-- ── Add Modal ── -->
@@ -626,10 +1099,11 @@
       </div>
       <div class="form-group">
         <label>컨텍 현황</label>
-        <select id="f-status">
+        <select id="f-status" onchange="toggleModalNote()">
           <option value="예정">컨텍 예정</option>
           <option value="중">컨텍 중</option>
-          <option value="완료">컨텍 완료</option>
+          <option value="확정">집행 확정</option>
+          <option value="실패">실패</option>
         </select>
       </div>
       <div class="form-group">
@@ -640,6 +1114,10 @@
           <option value="2026-08">2026년 8월</option>
         </select>
       </div>
+      <div class="form-group full" id="f-note-group" style="display:none;">
+        <label>컨텍 메모</label>
+        <textarea id="f-note" placeholder="컨텍 진행 내용을 입력하세요 (예: 2026-06-03 첫 메일 발송, 담당자 회신 대기 중)"></textarea>
+      </div>
     </div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeModal()">취소</button>
@@ -648,8 +1126,62 @@
   </div>
 </div>
 
+<!-- ── Memo Modal (크게 보기) ── -->
+<div class="modal-overlay" id="memoModalOverlay">
+  <div class="modal" style="width:600px">
+    <h2 id="memoModalTitle">메모</h2>
+    <textarea id="memoModalText" style="width:100%;min-height:300px;padding:14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:inherit;resize:vertical;outline:none;line-height:1.7;color:var(--text-main)" placeholder="메모를 입력하세요…"></textarea>
+    <div class="modal-actions">
+      <button class="btn-save" onclick="closeMemoModal()">확인</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Candidate Pool Modal (신규 후보 매체 추가) ── -->
+<div class="modal-overlay" id="poolModalOverlay">
+  <div class="modal">
+    <h2>신규 후보 매체 추가</h2>
+    <p style="font-size:12px;color:var(--text-sub);margin:-12px 0 18px">차월 [리스트 업데이트] 시 자동 제안되는 후보 풀에 추가됩니다. (이미 컨텍한 매체·기존 후보와 중복 불가)</p>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>카테고리</label>
+        <select id="p-cat">
+          <option value="프리랜서 플랫폼">프리랜서 플랫폼</option>
+          <option value="재능마켓">재능마켓</option>
+          <option value="배달·라이더">배달·라이더</option>
+          <option value="콘텐츠 크리에이터">콘텐츠 크리에이터</option>
+          <option value="온라인 교육">온라인 교육</option>
+          <option value="소호몰·셀러">소호몰·셀러</option>
+          <option value="설문·리서치">설문·리서치</option>
+          <option value="반려동물 서비스">반려동물 서비스</option>
+          <option value="인테리어·생활">인테리어·생활</option>
+          <option value="중고거래">중고거래</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>접속 방법</label>
+        <select id="p-access">
+          <option value="웹">웹</option>
+          <option value="앱">앱</option>
+          <option value="웹+앱">웹+앱</option>
+        </select>
+      </div>
+      <div class="form-group full"><label>서비스명</label><input type="text" id="p-name" placeholder="예: 새로운제휴매체" /></div>
+      <div class="form-group full"><label>서비스 설명</label><textarea id="p-desc" placeholder="서비스에 대한 간략한 설명"></textarea></div>
+      <div class="form-group full"><label>타겟</label><input type="text" id="p-target" placeholder="예: 20~40대 부업 희망자" /></div>
+      <div class="form-group"><label>대표 메일</label><input type="text" id="p-email" placeholder="partner@example.com" /></div>
+      <div class="form-group"><label>연락처</label><input type="text" id="p-tel" placeholder="02-0000-0000" /></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closePoolModal()">취소</button>
+      <button class="btn-save" onclick="addCandidate()">후보 추가</button>
+    </div>
+  </div>
+</div>
+
 <footer>
   © 2026 Wonder × D.Purple — 롯데손해보험 NTC 제휴처 관리 시스템 | 월 최대 30개 제휴처 관리
+  &nbsp;·&nbsp; <a href="#" onclick="resetState();return false;" style="color:#DC2626;text-decoration:none;font-weight:600;">초기 데이터로 되돌리기</a>
 </footer>
 
 <script>
@@ -703,6 +1235,48 @@ let data = [
 
 let nextId = 31;
 
+// ── localStorage 영구 저장 ──
+const STORAGE_KEY = "wonder_dpurple_affiliates_v1";
+let saveTimer = null;
+let userPool = [];   // 사용자가 앱에서 직접 추가한 신규 후보 매체
+
+function saveState() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ data, nextId, userPool }));
+  } catch (e) {
+    console.warn("저장 실패(localStorage 사용 불가):", e);
+  }
+}
+
+// 입력(메모) 중에는 디바운스로 저장하여 키 입력마다 쓰지 않음
+function saveStateDebounced() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(saveState, 400);
+}
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return false;
+    const parsed = JSON.parse(raw);
+    if (parsed && Array.isArray(parsed.data)) {
+      data = parsed.data;
+      if (typeof parsed.nextId === "number") nextId = parsed.nextId;
+      if (Array.isArray(parsed.userPool)) userPool = parsed.userPool;
+      return true;
+    }
+  } catch (e) {
+    console.warn("불러오기 실패(저장 데이터 손상):", e);
+  }
+  return false;
+}
+
+function resetState() {
+  if (!confirm("저장된 내용을 모두 지우고 초기 데이터로 되돌립니다. 계속하시겠습니까?")) return;
+  localStorage.removeItem(STORAGE_KEY);
+  location.reload();
+}
+
 function getCatStyle(cat) {
   const c = catColors[cat] || { bg: "#F1F5F9", color: "#475569" };
   return `background:${c.bg};color:${c.color}`;
@@ -717,34 +1291,40 @@ function getAccessClass(access) {
 function statusClass(s) {
   if (s === "예정") return "status-plan";
   if (s === "중") return "status-ing";
-  return "status-done";
+  if (s === "실패") return "status-fail";
+  return "status-done"; // 확정
 }
 function statusLabel(s) {
   if (s === "예정") return "컨텍 예정";
   if (s === "중") return "컨텍 중";
-  return "컨텍 완료";
+  if (s === "실패") return "실패";
+  return "집행 확정"; // 확정
 }
 
 function renderTargets(t) {
   return t.split(",").map(x => `<span class="target-chip">${x.trim()}</span>`).join(" ");
 }
 
-function filterData() {
+function getFilteredItems() {
   const month = document.getElementById("monthSelect").value;
   const q = document.getElementById("searchInput").value.toLowerCase();
   const cat = document.getElementById("catFilter").value;
   const st = document.getElementById("statusFilter").value;
-
-  let filtered = data.filter(d => {
+  return data.filter(d => {
     if (d.month !== month) return false;
     if (cat && d.cat !== cat) return false;
     if (st && d.status !== st) return false;
     if (q && !d.name.toLowerCase().includes(q) && !d.cat.toLowerCase().includes(q) && !d.desc.toLowerCase().includes(q)) return false;
     return true;
   });
+}
 
+function filterData() {
+  const filtered = getFilteredItems();
   renderTable(filtered);
   updateStats(filtered);
+  renderChart();
+  updatePipelineCount();
 }
 
 function renderTable(items) {
@@ -769,15 +1349,14 @@ function renderTable(items) {
       </td>
       <td class="status-wrap">
         <select class="status-select ${statusClass(item.status)}"
-                onchange="changeStatus(${item.id}, this.value, this)">
+                onchange="changeStatus(${item.id}, this.value)">
           <option value="예정" ${item.status==="예정"?"selected":""}>컨텍 예정</option>
           <option value="중"   ${item.status==="중"?"selected":""}>컨텍 중</option>
-          <option value="완료" ${item.status==="완료"?"selected":""}>컨텍 완료</option>
+          <option value="확정" ${item.status==="확정"?"selected":""}>집행 확정</option>
+          <option value="실패" ${item.status==="실패"?"selected":""}>실패</option>
         </select>
-        ${item.status === "중" ? `
-          <textarea class="contact-note" placeholder="컨텍 내용을 입력하세요…"
-                    oninput="updateNote(${item.id}, this.value)">${item.note}</textarea>
-        ` : ""}
+        ${item.status === "중" ? `<div class="svc-desc" style="margin-top:6px">단계별 메모는 <strong>컨텍 진행 관리</strong> 탭에서 관리됩니다.</div>` : ""}
+        ${(item.status === "확정" || item.status === "실패") ? `<div class="svc-desc" style="margin-top:6px">종료 월·세부 메모는 <strong>컨텍 종료</strong> 탭에서 관리됩니다.</div>` : ""}
       </td>
       <td><button class="btn-del" onclick="deleteItem(${item.id})">삭제</button></td>
     `;
@@ -789,43 +1368,293 @@ function updateStats(items) {
   document.getElementById("s-total").textContent = items.length;
   document.getElementById("s-plan").textContent = items.filter(d => d.status === "예정").length;
   document.getElementById("s-ing").textContent = items.filter(d => d.status === "중").length;
-  document.getElementById("s-done").textContent = items.filter(d => d.status === "완료").length;
+  document.getElementById("s-confirm").textContent = items.filter(d => d.status === "확정").length;
+  document.getElementById("s-fail").textContent = items.filter(d => d.status === "실패").length;
 }
 
-function changeStatus(id, val, sel) {
+function changeStatus(id, val) {
   const item = data.find(d => d.id === id);
   if (!item) return;
   item.status = val;
-  sel.className = `status-select ${statusClass(val)}`;
-  // toggle note textarea
-  const wrap = sel.closest(".status-wrap");
-  const existing = wrap.querySelector(".contact-note");
-  if (val === "중" && !existing) {
-    const ta = document.createElement("textarea");
-    ta.className = "contact-note";
-    ta.placeholder = "컨텍 내용을 입력하세요…";
-    ta.value = item.note || "";
-    ta.oninput = function() { updateNote(id, this.value); };
-    wrap.appendChild(ta);
-  } else if (val !== "중" && existing) {
-    existing.remove();
+  if (val === "중") ensurePipeline(item);
+  if (val === "확정" || val === "실패") {
+    ensureDone(item);
+    if (!item.doneMonth) item.doneMonth = document.getElementById("monthSelect").value;
   }
-  // re-calc stats
-  const month = document.getElementById("monthSelect").value;
-  const filtered = data.filter(d => d.month === month);
-  updateStats(filtered);
-  document.getElementById("countBadge").textContent = `${filtered.length} / 30개`;
+  saveState();
+  // 표·차트·통계·탭 카운트 일괄 갱신
+  filterData();
 }
 
 function updateNote(id, val) {
   const item = data.find(d => d.id === id);
-  if (item) item.note = val;
+  if (item) { item.note = val; saveStateDebounced(); }
+}
+
+// ── Pipeline (컨텍 진행 관리) ──
+const STAGES = ["초기컨택", "제휴방향논의중", "적용중", "완료"];
+
+function ensurePipeline(item) {
+  if (!Array.isArray(item.stageMemos)) {
+    item.stageMemos = ["", "", "", ""];
+    // 기존 컨텍 메모를 1단계(초기컨택)로 이관
+    if (item.note) item.stageMemos[0] = item.note;
+  }
+  if (typeof item.currentStage !== "number") item.currentStage = 0;
+}
+
+function pipelineItems() {
+  const month = document.getElementById("monthSelect").value;
+  return data.filter(d => d.month === month && d.status === "중");
+}
+
+function doneItems() {
+  const month = document.getElementById("monthSelect").value;
+  return data.filter(d => d.month === month && (d.status === "확정" || d.status === "실패"));
+}
+
+function updatePipelineCount() {
+  document.getElementById("pipelineCount").textContent = pipelineItems().length;
+  document.getElementById("doneCount").textContent = doneItems().length;
+}
+
+function esc(s) {
+  return (s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function switchTab(tab) {
+  const tabs = {
+    list:     ["tab-list", "tabBtnList"],
+    pipeline: ["tab-pipeline", "tabBtnPipeline"],
+    done:     ["tab-done", "tabBtnDone"],
+    next:     ["tab-next", "tabBtnNext"],
+  };
+  Object.entries(tabs).forEach(([key, [secId, btnId]]) => {
+    document.getElementById(secId).style.display = (key === tab) ? "" : "none";
+    document.getElementById(btnId).classList.toggle("active", key === tab);
+  });
+  if (tab === "list") filterData();
+  else if (tab === "pipeline") renderPipeline();
+  else if (tab === "done") renderDone();
+  else renderNext();
+}
+
+// 세로축 = 제휴처, 가로축 = 컨텍 단계 매트릭스
+function renderPipeline() {
+  const items = pipelineItems();
+  updatePipelineCount();
+
+  const grid = document.getElementById("pipelineGrid");
+  const empty = document.getElementById("pipelineEmpty");
+
+  if (items.length === 0) {
+    grid.innerHTML = "";
+    empty.style.display = "block";
+    return;
+  }
+  empty.style.display = "none";
+
+  const headCells = STAGES.map((s, i) =>
+    `<th class="mtx-col-head"><span class="mtx-step-num">${i + 1}</span>${s}</th>`
+  ).join("");
+
+  const lastIdx = STAGES.length - 1; // 완료 단계
+  const rows = items.map(item => {
+    ensurePipeline(item);
+    const memoBox = (idx, ph) => `<div class="memo-wrap">
+          <button class="memo-expand" onclick="openMemoModal(${item.id}, ${idx})" title="크게 보기">⤢</button>
+          <textarea class="mtx-memo" placeholder="${ph}"
+                    oninput="updateStageMemo(${item.id}, ${idx}, this.value)">${esc(item.stageMemos[idx])}</textarea>
+        </div>`;
+    const cells = STAGES.map((s, i) => {
+      const cls = i < item.currentStage ? "done" : (i === item.currentStage ? "current" : "");
+      const mark = i < item.currentStage ? "✓" : (i === item.currentStage ? "●" : "○");
+      if (i === lastIdx) {
+        // 완료 단계 = 결과 메모(상단) → 집행확정 / 실패 결정 버튼(하단)
+        return `<td class="mtx-cell ${cls}">
+          ${memoBox(i, "결과 메모(확정 조건/불발 사유 등)를 먼저 입력하세요…")}
+          <div class="outcome-btns" style="margin-top:8px;margin-bottom:0">
+            <button class="outcome-btn confirm" onclick="setOutcome(${item.id}, '확정')">집행 확정</button>
+            <button class="outcome-btn fail" onclick="setOutcome(${item.id}, '실패')">실패</button>
+          </div>
+        </td>`;
+      }
+      return `<td class="mtx-cell ${cls}">
+        <button class="stage-mark" onclick="setStage(${item.id}, ${i})" title="이 단계를 현재 단계로 설정">${mark}</button>
+        ${memoBox(i, s + " 메모를 입력하세요…")}
+      </td>`;
+    }).join("");
+
+    return `<tr>
+      <th class="mtx-row-head">
+        <div class="mtx-name">${esc(item.name)}</div>
+        <div class="mtx-cat"><span class="cat-tag" style="${getCatStyle(item.cat)}">${item.cat}</span></div>
+        <div class="mtx-cur">현재 단계: <strong>${STAGES[item.currentStage]}</strong></div>
+      </th>
+      ${cells}
+    </tr>`;
+  }).join("");
+
+  grid.innerHTML = `<table class="matrix">
+    <thead><tr><th class="mtx-corner">제휴처 \\ 컨텍 단계</th>${headCells}</tr></thead>
+    <tbody>${rows}</tbody>
+  </table>`;
+}
+
+// 월별 컨텍 현황 누적(스택) 그래프 — 카테고리·검색 필터만 반영, 모든 월/상태 집계
+function chartBase() {
+  const q = document.getElementById("searchInput").value.toLowerCase();
+  const cat = document.getElementById("catFilter").value;
+  return data.filter(d => {
+    if (cat && d.cat !== cat) return false;
+    if (q && !d.name.toLowerCase().includes(q) && !d.cat.toLowerCase().includes(q) && !d.desc.toLowerCase().includes(q)) return false;
+    return true;
+  });
+}
+
+function renderChart() {
+  const body = document.getElementById("chartBody");
+  const months = [...document.getElementById("monthSelect").options].map(o => ({ value: o.value, label: o.textContent }));
+  const base = chartBase();
+
+  const rows = months.map(m => {
+    const inM = base.filter(d => d.month === m.value);
+    return {
+      label: m.label,
+      plan:    inM.filter(d => d.status === "예정").length,
+      ing:     inM.filter(d => d.status === "중").length,
+      confirm: inM.filter(d => d.status === "확정").length,
+      fail:    inM.filter(d => d.status === "실패").length,
+    };
+  });
+  const maxTotal = Math.max(1, ...rows.map(r => r.plan + r.ing + r.confirm + r.fail));
+
+  body.innerHTML = rows.map(r => {
+    const total = r.plan + r.ing + r.confirm + r.fail;
+    const seg = (n, cls) => n > 0 ? `<div class="mseg ${cls}" style="width:${(n / maxTotal * 100).toFixed(2)}%" title="${n}건">${n}</div>` : "";
+    return `<div class="mbar-row">
+      <div class="mbar-month">${r.label}</div>
+      <div class="mbar-track">${seg(r.plan, "seg-plan")}${seg(r.ing, "seg-ing")}${seg(r.confirm, "seg-confirm")}${seg(r.fail, "seg-fail")}</div>
+      <div class="mbar-total">합계 ${total}건</div>
+    </div>`;
+  }).join("");
+}
+
+// ── 컨텍 완료 관리 ──
+function ensureDone(item) {
+  if (typeof item.doneMonth !== "string") item.doneMonth = item.month || "";
+  if (typeof item.doneMemo !== "string") item.doneMemo = "";
+}
+
+function renderDone() {
+  const items = doneItems();
+  updatePipelineCount();
+
+  const grid = document.getElementById("doneGrid");
+  const empty = document.getElementById("doneEmpty");
+
+  if (!items.length) {
+    grid.innerHTML = "";
+    empty.style.display = "block";
+    return;
+  }
+  empty.style.display = "none";
+
+  const rows = items.map(item => {
+    ensureDone(item);
+    const badge = item.status === "확정"
+      ? `<span class="result-badge result-confirm">집행 확정</span>`
+      : `<span class="result-badge result-fail">실패</span>`;
+    return `<tr>
+      <td class="done-name-cell">
+        <div class="svc-name">${esc(item.name)}</div>
+        <div class="svc-desc">${esc(item.desc)}</div>
+        <div style="margin-top:6px"><span class="cat-tag" style="${getCatStyle(item.cat)}">${item.cat}</span></div>
+      </td>
+      <td>${badge}</td>
+      <td><input type="month" class="done-month" value="${item.doneMonth}" onchange="updateDoneMonth(${item.id}, this.value)"></td>
+      <td><textarea class="done-memo" placeholder="종료 세부 사항(계약 조건, 담당자, 후속 일정 / 불발 사유 등)을 입력하세요…"
+                    oninput="updateDoneMemo(${item.id}, this.value)">${esc(item.doneMemo)}</textarea></td>
+    </tr>`;
+  }).join("");
+
+  grid.innerHTML = `<table class="done-table">
+    <thead><tr><th>제휴처</th><th style="width:110px">결과</th><th style="width:170px">종료 월</th><th>세부 사항 메모</th></tr></thead>
+    <tbody>${rows}</tbody>
+  </table>`;
+}
+
+function updateDoneMonth(id, val) {
+  const item = data.find(d => d.id === id);
+  if (item) { item.doneMonth = val; saveState(); }
+}
+
+function updateDoneMemo(id, val) {
+  const item = data.find(d => d.id === id);
+  if (item) { item.doneMemo = val; saveStateDebounced(); }
+}
+
+function setStage(id, stage) {
+  const item = data.find(d => d.id === id);
+  if (!item) return;
+  ensurePipeline(item);
+  item.currentStage = stage;
+  saveState();
+  renderPipeline();
+}
+
+function updateStageMemo(id, stage, val) {
+  const item = data.find(d => d.id === id);
+  if (!item) return;
+  ensurePipeline(item);
+  item.stageMemos[stage] = val;
+  saveStateDebounced();
+}
+
+// 단계 메모 크게 보기/편집 모달
+function openMemoModal(id, stage) {
+  const item = data.find(d => d.id === id);
+  if (!item) return;
+  ensurePipeline(item);
+  document.getElementById("memoModalTitle").textContent = `${item.name} · ${STAGES[stage]} 메모`;
+  const ta = document.getElementById("memoModalText");
+  ta.value = item.stageMemos[stage] || "";
+  ta.oninput = () => updateStageMemo(id, stage, ta.value);
+  document.getElementById("memoModalOverlay").classList.add("open");
+  ta.focus();
+}
+function closeMemoModal() {
+  document.getElementById("memoModalOverlay").classList.remove("open");
+  renderPipeline(); // 변경 내용을 셀에 반영
+}
+
+// 파이프라인 완료 단계: 집행확정 / 실패 결정
+function setOutcome(id, outcome) {
+  const item = data.find(d => d.id === id);
+  if (!item) return;
+  const label = outcome === "확정" ? "집행 확정" : "실패";
+  if (!confirm(`'${item.name}'을(를) [${label}](으)로 종료 처리합니다.\n컨텍 종료 탭으로 이동합니다. 계속하시겠습니까?`)) return;
+  ensurePipeline(item);
+  ensureDone(item);
+  item.status = outcome;                          // 확정 | 실패
+  item.currentStage = STAGES.length - 1;          // 완료 단계
+  if (!item.doneMonth) item.doneMonth = document.getElementById("monthSelect").value;
+  // 완료 단계 메모를 종료 탭 세부 메모로 이관
+  if (item.stageMemos[STAGES.length - 1]) item.doneMemo = item.stageMemos[STAGES.length - 1];
+  saveState();
+  renderPipeline();   // 해당 항목은 파이프라인(중)에서 빠짐
 }
 
 function deleteItem(id) {
   if (!confirm("해당 제휴처를 삭제하시겠습니까?")) return;
   data = data.filter(d => d.id !== id);
+  saveState();
   filterData();
+}
+
+function toggleModalNote() {
+  const status = document.getElementById("f-status").value;
+  document.getElementById("f-note-group").style.display = status === "중" ? "flex" : "none";
 }
 
 function openModal() {
@@ -843,6 +1672,8 @@ function saveItem() {
   const monthData = data.filter(d => d.month === month);
   if (monthData.length >= 30) { alert("해당 월의 제휴처는 최대 30개까지 등록 가능합니다."); return; }
 
+  const status = document.getElementById("f-status").value;
+
   data.push({
     id: nextId++,
     month,
@@ -853,9 +1684,11 @@ function saveItem() {
     target: document.getElementById("f-target").value.trim(),
     email: document.getElementById("f-email").value.trim(),
     tel: document.getElementById("f-tel").value.trim(),
-    status: document.getElementById("f-status").value,
-    note: "",
+    status,
+    note: status === "중" ? document.getElementById("f-note").value.trim() : "",
   });
+
+  saveState();
 
   // switch to the month we just added
   document.getElementById("monthSelect").value = month;
@@ -863,15 +1696,360 @@ function saveItem() {
   filterData();
 
   // reset form
-  ["f-name","f-desc","f-target","f-email","f-tel"].forEach(id => document.getElementById(id).value = "");
+  ["f-name","f-desc","f-target","f-email","f-tel","f-note"].forEach(id => document.getElementById(id).value = "");
+  document.getElementById("f-status").value = "예정";
+  toggleModalNote();
 }
 
 // close modal on overlay click
 document.getElementById("modalOverlay").addEventListener("click", function(e) {
   if (e.target === this) closeModal();
 });
+document.getElementById("memoModalOverlay").addEventListener("click", function(e) {
+  if (e.target === this) closeMemoModal();
+});
+document.getElementById("poolModalOverlay").addEventListener("click", function(e) {
+  if (e.target === this) closePoolModal();
+});
+
+// ── 차월 신규 제휴 매체 후보 풀 (Claude 발굴, 기존 시드 30개와 중복 없음) ──
+const MEDIA_POOL = [
+  { cat:"프리랜서 플랫폼", access:"웹", name:"이랜서", desc:"국내 대표 IT 아웃소싱 매칭. 개발·디자인 기업 프로젝트 수주 가능", target:"IT 개발자·디자이너 프리랜서, 30~45대", email:"partner@elancer.co.kr", tel:"02-6925-1234" },
+  { cat:"프리랜서 플랫폼", access:"웹", name:"프리모아", desc:"디자인·개발 외주 견적 매칭 플랫폼. 견적 비교로 프로젝트 연결", target:"중급 이상 프리랜서, 외주 작업자", email:"biz@freemoa.net", tel:"02-3144-7700" },
+  { cat:"프리랜서 플랫폼", access:"웹", name:"라우드소싱", desc:"디자인 공모전·콘테스트 기반 수익화. 로고·네이밍 등 참여형 작업", target:"디자이너·일러스트레이터, 20~40대", email:"help@loud.kr", tel:"02-558-0042" },
+  { cat:"프리랜서 플랫폼", access:"웹+앱", name:"위티즌", desc:"전문가 자문·컨설팅 매칭 서비스. 직무 경험 기반 유료 상담", target:"현직 전문가, 자문 부업 희망자", email:"partner@witizen.com", tel:"02-2088-3690" },
+  { cat:"프리랜서 플랫폼", access:"웹", name:"잡코리아 아웃소싱", desc:"잡코리아 운영 프리랜서 프로젝트 중개. 검증된 기업 의뢰", target:"경력 프리랜서, 35~50대", email:"outsourcing@jobkorea.co.kr", tel:"1588-9350" },
+  { cat:"재능마켓", access:"웹+앱", name:"재능넷", desc:"재능 거래 오픈마켓. 디자인·문서·번역 등 소액 재능 판매", target:"20~40대 소규모 재능 판매자", email:"cs@jaenung.net", tel:"1666-0987" },
+  { cat:"재능마켓", access:"웹+앱", name:"솜씨당", desc:"원데이클래스·공방 클래스 중개. 오프라인 강사 모집", target:"공예·취미 강사, 20~40대", email:"partner@somssidang.com", tel:"070-8095-1234" },
+  { cat:"재능마켓", access:"웹+앱", name:"하비풀", desc:"취미 키트·클래스 구독 플랫폼. 취미 콘텐츠 제작자 모집", target:"취미·핸드메이드 창작자", email:"biz@hobbyful.co.kr", tel:"070-4849-5678" },
+  { cat:"재능마켓", access:"웹", name:"클래스원트", desc:"소규모 클래스 매칭. 1:1·소수 정예 강의 운영", target:"전문 강사·튜터, 20~40대", email:"hello@class1.kr", tel:"02-332-7788" },
+  { cat:"재능마켓", access:"앱", name:"비스킷", desc:"긱워커 단기 재능 매칭 앱. 짧은 단위 업무 수행", target:"단기·유연근무 희망자, 20~30대", email:"partner@biskit.io", tel:"070-7717-2200" },
+  { cat:"배달·라이더", access:"앱", name:"바로고", desc:"종합 배달대행 라이더 플랫폼. 지역 거점 기반 배달 수행", target:"이륜차 보유 라이더, 20~40대", email:"rider@barogo.com", tel:"1666-4767" },
+  { cat:"배달·라이더", access:"앱", name:"부릉(메쉬코리아)", desc:"도심 물류·배달 라이더 네트워크. 풀필먼트 연계 배송", target:"전업·부업 라이더, 20~40대", email:"partner@vroong.com", tel:"1670-8255" },
+  { cat:"배달·라이더", access:"앱", name:"쿠팡플렉스", desc:"자차 활용 택배 배송 파트너. 원하는 시간에 배송 수익", target:"자가용 보유 20~50대, 유연근무", email:"flex@coupang.com", tel:"1577-7011" },
+  { cat:"배달·라이더", access:"앱", name:"요기요 라이더", desc:"요기요 음식 배달 라이더. 건당 수익 구조 운영", target:"이륜차·자전거 보유자, 20~40대", email:"rider@yogiyo.co.kr", tel:"1661-5270" },
+  { cat:"배달·라이더", access:"앱", name:"만나플러스", desc:"배달대행 통합 관제 플랫폼. 라이더 자유 배차", target:"배달 라이더, 20~40대", email:"help@mannaplus.co.kr", tel:"1600-3215" },
+  { cat:"콘텐츠 크리에이터", access:"웹", name:"인프런", desc:"IT·실무 지식공유 강의 플랫폼. 강사 등록 후 강의 판매", target:"현직 개발자·실무 전문가", email:"instructor@inflearn.com", tel:"070-4948-1234" },
+  { cat:"콘텐츠 크리에이터", access:"웹", name:"네이버 프리미엄콘텐츠", desc:"전문 콘텐츠 유료 구독 플랫폼. 채널 개설 후 수익화", target:"전문 분야 작가·에디터", email:"premium@navercorp.com", tel:"1588-3820" },
+  { cat:"콘텐츠 크리에이터", access:"웹+앱", name:"패트리온 코리아", desc:"창작자 후원 구독 플랫폼. 팬 기반 정기 후원 수익", target:"일러스트·음악·영상 창작자", email:"creators@patreon.kr", tel:"02-6022-7100" },
+  { cat:"콘텐츠 크리에이터", access:"앱", name:"스푼라디오", desc:"오디오 라이브 방송 플랫폼. DJ 활동으로 후원 수익", target:"오디오 크리에이터, 20~30대", email:"dj@spooncast.net", tel:"02-565-3535" },
+  { cat:"콘텐츠 크리에이터", access:"웹", name:"위픽(WePick)", desc:"웹툰·웹소설 연재 플랫폼. 창작 연재 수익 배분", target:"웹툰·웹소설 작가, 20~40대", email:"partner@wepick.kr", tel:"02-336-9090" },
+  { cat:"온라인 교육", access:"웹", name:"콜로소", desc:"실무 전문가 영상 클래스. 분야 마스터 강사 섭외", target:"디자인·요리·영상 등 실무 고수", email:"instructor@coloso.co.kr", tel:"02-1533-1304" },
+  { cat:"온라인 교육", access:"웹", name:"스터디파이", desc:"온라인 스터디·강의 플랫폼. 리더·강사 모집", target:"직무 전문가, 강의 부업 희망자", email:"biz@studypie.co", tel:"070-8807-3900" },
+  { cat:"온라인 교육", access:"웹", name:"베어유", desc:"직장인 실무 스킬 클래스. 강사 파트너 등록", target:"실무 노하우 보유 직장인", email:"partner@bear-u.com", tel:"02-552-1234" },
+  { cat:"온라인 교육", access:"웹+앱", name:"에듀캐스트", desc:"온라인 강의 제작·판매 플랫폼. 자체 강의 수익화", target:"전문 지식 보유 강사", email:"help@educast.com", tel:"02-2039-1234" },
+  { cat:"온라인 교육", access:"웹", name:"라이브클래스", desc:"실시간 온라인 클래스 도구. 강의 개설·판매", target:"라이브 강의 운영 강사", email:"cs@liveklass.com", tel:"070-4042-7700" },
+  { cat:"소호몰·셀러", access:"웹+앱", name:"11번가 셀러", desc:"오픈마켓 입점 판매. 상품 등록 후 온라인 판매", target:"온라인 판매 희망자, 30~50대", email:"seller@11st.co.kr", tel:"1599-4445" },
+  { cat:"소호몰·셀러", access:"웹+앱", name:"지마켓 셀러", desc:"지마켓 오픈마켓 셀러 등록. 상품 판매·정산", target:"소상공인·개인 판매자", email:"seller@gmarket.co.kr", tel:"1566-5701" },
+  { cat:"소호몰·셀러", access:"웹", name:"카페24", desc:"쇼핑몰 구축 솔루션. 독립몰 창업·운영 지원", target:"온라인 창업자, 20~40대", email:"partner@cafe24.com", tel:"1588-3413" },
+  { cat:"소호몰·셀러", access:"웹+앱", name:"도매꾹", desc:"도매 사입·셀러 공급 플랫폼. 위탁·사입 판매", target:"온라인 셀러·리셀러", email:"cs@domeggook.com", tel:"1644-5705" },
+  { cat:"소호몰·셀러", access:"웹", name:"오너클랜", desc:"위탁판매 공급사 연동. 상품 소싱 후 무재고 판매", target:"무재고 창업·부업 셀러", email:"partner@ownerclan.com", tel:"1644-1455" },
+  { cat:"설문·리서치", access:"앱", name:"패널나우", desc:"모바일 설문 리워드 앱. 설문 참여로 포인트 적립", target:"전 연령대, 소액 적립 희망자", email:"help@panelnow.co.kr", tel:"02-6203-1900" },
+  { cat:"설문·리서치", access:"앱", name:"틸리언 프로", desc:"설문 패널 리워드 앱. 정기 설문 참여 보상", target:"전 연령대 설문 참여자", email:"panel@tillionpro.co.kr", tel:"02-1670-0903" },
+  { cat:"설문·리서치", access:"앱", name:"두잇서베이", desc:"설문조사 참여 적립 앱. 일상 설문 리워드", target:"모든 연령, 부수입 희망자", email:"cs@dooit.co.kr", tel:"02-563-1234" },
+  { cat:"설문·리서치", access:"앱", name:"오베이", desc:"모바일 설문 응답 앱. 짧은 설문으로 적립", target:"20~40대 모바일 사용자", email:"partner@ovey.co.kr", tel:"02-3453-2200" },
+  { cat:"설문·리서치", access:"웹+앱", name:"라임서베이", desc:"설문 응답 리워드 플랫폼. 패널 등록 후 참여", target:"전 연령대 설문 패널", email:"help@limesurvey.co.kr", tel:"02-718-0905" },
+  { cat:"반려동물 서비스", access:"웹+앱", name:"펫닥", desc:"반려동물 건강상담·전문가 매칭. 수의·훈련 전문가 활동", target:"수의·반려 전문 지식 보유자", email:"partner@petdoc.co.kr", tel:"02-1644-0903" },
+  { cat:"반려동물 서비스", access:"앱", name:"펫프렌즈 파트너", desc:"반려용품·서비스 제휴 네트워크. 파트너 입점", target:"반려 서비스 사업자", email:"biz@pet-friends.co.kr", tel:"1644-0917" },
+  { cat:"반려동물 서비스", access:"앱", name:"우프(woopet)", desc:"펫시터 매칭 플랫폼. 돌봄 등록 후 시간제 수익", target:"반려동물 돌봄 가능자, 20~40대", email:"partner@woopet.com", tel:"070-8064-1004" },
+  { cat:"반려동물 서비스", access:"앱", name:"펫미업", desc:"반려동물 픽업·돌봄 O2O. 케어 매니저 모집", target:"반려동물 케어 경험자", email:"help@petmeup.co.kr", tel:"070-4205-8800" },
+  { cat:"반려동물 서비스", access:"앱", name:"도그워커스", desc:"강아지 산책 도우미 매칭. 워커 등록 후 산책 수익", target:"반려견 산책 가능자, 20~40대", email:"walk@dogwalkers.kr", tel:"070-8866-2200" },
+  { cat:"인테리어·생활", access:"웹+앱", name:"집닥", desc:"인테리어 시공 견적 매칭. 시공 파트너 등록", target:"인테리어·시공 전문가", email:"partner@zipdoc.co.kr", tel:"1670-1980" },
+  { cat:"인테리어·생활", access:"앱", name:"미소", desc:"홈클리닝 매니저 매칭. 청소 매니저 등록 후 부업", target:"가사·청소 매니저, 30~50대", email:"partner@miso.kr", tel:"1522-6585" },
+  { cat:"인테리어·생활", access:"앱", name:"대리주부", desc:"가사도우미 매칭 플랫폼. 가사 매니저 활동", target:"가사 서비스 경험자, 40~60대", email:"help@homemaster.net", tel:"1644-4257" },
+  { cat:"인테리어·생활", access:"앱", name:"와홈", desc:"청소·홈케어 매니저 플랫폼. 정기 청소 배정", target:"홈케어 매니저, 30~50대", email:"partner@wahome.com", tel:"1522-1004" },
+  { cat:"중고거래", access:"앱", name:"헬로마켓", desc:"모바일 중고거래 플랫폼. 셀러 등록 후 판매", target:"20~40대 중고 판매자", email:"cs@hellomarket.com", tel:"02-565-7900" },
+  { cat:"중고거래", access:"앱", name:"셀잇", desc:"중고 간편판매 앱. 빠른 검수·판매 부업", target:"중고 물품 판매 희망자", email:"partner@sellit.co.kr", tel:"1670-2900" },
+  { cat:"중고거래", access:"웹+앱", name:"빈티지시티", desc:"빈티지·구제 거래 플랫폼. 셀러 입점 후 판매", target:"빈티지·구제 셀러, 20~30대", email:"seller@vintagecity.co.kr", tel:"02-336-1212" },
+  { cat:"프리랜서 플랫폼", access:"웹", name:"탤런트뱅크", desc:"전문가·임원급 자문 매칭. 경력 기반 프로젝트 자문", target:"임원·시니어 전문가, 40~60대", email:"partner@talentbank.co.kr", tel:"02-2038-2700" },
+  { cat:"프리랜서 플랫폼", access:"웹", name:"휴넷 프리랜서", desc:"교육·HR 분야 프리랜서 매칭. 강의·컨설팅 외주", target:"교육·HR 전문가", email:"freelancer@hunet.co.kr", tel:"1588-6559" },
+  { cat:"프리랜서 플랫폼", access:"웹", name:"슈퍼코더", desc:"검증 개발자 아웃소싱. 원격 개발 프로젝트 매칭", target:"중·고급 개발자, 원격근무 희망자", email:"dev@supercoder.kr", tel:"02-555-7788" },
+  { cat:"프리랜서 플랫폼", access:"웹", name:"디자인베이스", desc:"디자인 외주 매칭. 브랜딩·UX 프로젝트 수주", target:"디자이너 프리랜서, 20~40대", email:"hello@designbase.kr", tel:"02-3142-9090" },
+  { cat:"프리랜서 플랫폼", access:"웹+앱", name:"카피킹", desc:"카피·콘텐츠 라이팅 전문 매칭. 글쓰기 외주", target:"카피라이터·에디터", email:"partner@copyking.kr", tel:"070-7878-1234" },
+  { cat:"프리랜서 플랫폼", access:"웹", name:"번역의신", desc:"번역·통역 전문 매칭. 다국어 번역 외주", target:"번역가·외국어 능통자", email:"cs@translategod.kr", tel:"02-6010-3344" },
+  { cat:"재능마켓", access:"웹+앱", name:"재능마켓고", desc:"소액 재능 거래 마켓. 디자인·영상·문서 작업 판매", target:"20~40대 재능 판매자", email:"cs@talentgo.kr", tel:"1666-2200" },
+  { cat:"재능마켓", access:"웹+앱", name:"솜씨살롱", desc:"공예·살롱형 클래스 중개. 소규모 오프라인 강의", target:"공예·취미 강사", email:"partner@somssisalon.com", tel:"070-8095-5678" },
+  { cat:"재능마켓", access:"앱", name:"핸디즈", desc:"수공예·핸드메이드 클래스/제품 마켓. 작가 입점", target:"핸드메이드 작가, 20~40대", email:"biz@handiz.kr", tel:"070-4242-1212" },
+  { cat:"재능마켓", access:"앱", name:"레슨핑", desc:"취미·스포츠 레슨 매칭. 강사 등록 후 레슨", target:"스포츠·취미 강사", email:"partner@lessonping.com", tel:"070-7100-3030" },
+  { cat:"재능마켓", access:"웹+앱", name:"클래스메이트", desc:"동네 기반 클래스 매칭. 소규모 강의 운영", target:"지역 강사·튜터, 20~40대", email:"hello@classmate.kr", tel:"02-332-4545" },
+  { cat:"재능마켓", access:"웹+앱", name:"튜터링", desc:"1:1 온라인 과외·튜터 매칭. 화상 과외 수익", target:"과외·튜터 희망자, 20~30대", email:"tutor@tutoring.co.kr", tel:"02-540-9090" },
+  { cat:"배달·라이더", access:"앱", name:"띵동라이더", desc:"지역 배달대행 라이더 모집. 자유 배차 수익", target:"이륜차 보유 라이더", email:"rider@ddingdong.kr", tel:"1600-9123" },
+  { cat:"배달·라이더", access:"앱", name:"딜리버리N", desc:"종합 배달대행 플랫폼. 건당 정산 라이더", target:"전업·부업 라이더, 20~40대", email:"rider@deliveryn.kr", tel:"1670-4545" },
+  { cat:"배달·라이더", access:"앱", name:"로지올스", desc:"물류·라스트마일 배송 파트너. 거점 배송", target:"자차·이륜차 보유자", email:"partner@logials.kr", tel:"1599-7878" },
+  { cat:"배달·라이더", access:"앱", name:"퀵퀵", desc:"도보·이륜 퀵서비스 매칭. 소형 물품 즉시 배송", target:"도보·이륜 배송 가능자", email:"help@quickquick.kr", tel:"1644-3322" },
+  { cat:"배달·라이더", access:"앱", name:"고고엑스", desc:"화물·이사 운송 매칭. 차량 보유 기사 모집", target:"화물차·밴 보유 기사", email:"driver@gogox.kr", tel:"1670-0011" },
+  { cat:"배달·라이더", access:"앱", name:"슈퍼히어로", desc:"이륜 배달대행 라이더 네트워크. 실시간 배차", target:"오토바이 보유 라이더", email:"rider@superhero.kr", tel:"1666-7007" },
+  { cat:"콘텐츠 크리에이터", access:"웹+앱", name:"유튜브 파트너", desc:"유튜브 파트너 프로그램. 영상 광고·멤버십 수익화", target:"영상 크리에이터, 전 연령", email:"creators@youtube.com", tel:"02-531-9000" },
+  { cat:"콘텐츠 크리에이터", access:"앱", name:"틱톡 크리에이터", desc:"틱톡 크리에이터 수익 프로그램. 숏폼 콘텐츠 보상", target:"숏폼 크리에이터, 10~30대", email:"creator@tiktok.com", tel:"02-6022-1700" },
+  { cat:"콘텐츠 크리에이터", access:"웹+앱", name:"아프리카TV", desc:"라이브 방송 BJ 활동. 별풍선 후원 수익", target:"라이브 방송 크리에이터", email:"partner@afreecatv.com", tel:"1899-6075" },
+  { cat:"콘텐츠 크리에이터", access:"웹+앱", name:"치지직", desc:"네이버 라이브 스트리밍. 게임·방송 후원 수익", target:"게임·라이브 스트리머", email:"chzzk@navercorp.com", tel:"1588-3820" },
+  { cat:"콘텐츠 크리에이터", access:"웹", name:"텀블벅", desc:"창작 프로젝트 크라우드펀딩. 굿즈·출판 후원", target:"창작자·메이커, 20~40대", email:"creator@tumblbug.com", tel:"02-336-0813" },
+  { cat:"콘텐츠 크리에이터", access:"웹+앱", name:"카카오페이지 창작", desc:"웹소설·웹툰 연재 플랫폼. 정산형 창작 수익", target:"웹소설·웹툰 작가", email:"creator@kakaopage.com", tel:"1644-1095" },
+  { cat:"온라인 교육", access:"웹", name:"코드잇", desc:"코딩 교육 플랫폼. 강의 제작·튜터 활동", target:"개발 실무자·강사", email:"instructor@codeit.kr", tel:"02-6953-0707" },
+  { cat:"온라인 교육", access:"웹", name:"데이원클래스", desc:"실무 직무 클래스. 전문가 강사 섭외", target:"실무 전문가, 강의 부업자", email:"partner@day1company.co.kr", tel:"02-1522-9886" },
+  { cat:"온라인 교육", access:"웹+앱", name:"야나두", desc:"어학·자기계발 학습 플랫폼. 강사·튜터 모집", target:"어학·자기계발 강사", email:"biz@yanadoo.co.kr", tel:"1600-0563" },
+  { cat:"온라인 교육", access:"웹+앱", name:"시원스쿨", desc:"어학 교육 플랫폼. 강사 등록 후 강의 수익", target:"어학 강사, 20~40대", email:"teacher@siwonschool.com", tel:"02-6409-0878" },
+  { cat:"온라인 교육", access:"웹+앱", name:"에어클래스", desc:"기업·직무 교육 마켓. 강사 콘텐츠 등록", target:"직무 교육 전문가", email:"partner@airklass.com", tel:"070-4849-9090" },
+  { cat:"온라인 교육", access:"웹", name:"글로컬강사", desc:"지역·평생교육 강사 매칭. 오프라인 강의 연계", target:"평생교육·자격증 강사", email:"help@glocal-edu.kr", tel:"02-555-3300" },
+  { cat:"소호몰·셀러", access:"웹+앱", name:"쿠팡 마켓플레이스", desc:"쿠팡 오픈마켓 입점. 상품 판매·로켓 연동", target:"온라인 셀러, 30~50대", email:"seller@coupang.com", tel:"1577-7011" },
+  { cat:"소호몰·셀러", access:"웹+앱", name:"위메프 셀러", desc:"위메프 오픈마켓 셀러 등록. 상품 판매", target:"소상공인·개인 판매자", email:"partner@wemakeprice.com", tel:"1588-4763" },
+  { cat:"소호몰·셀러", access:"웹+앱", name:"티몬 셀러", desc:"티몬 입점 판매. 딜·상품 등록 운영", target:"온라인 판매 희망자", email:"seller@tmon.co.kr", tel:"1544-6240" },
+  { cat:"소호몰·셀러", access:"웹", name:"메이크샵", desc:"쇼핑몰 구축 솔루션. 독립몰 창업 지원", target:"온라인 창업자", email:"partner@makeshop.co.kr", tel:"1644-3692" },
+  { cat:"소호몰·셀러", access:"웹", name:"아임웹", desc:"노코드 홈페이지·쇼핑몰 빌더. 1인몰 운영", target:"1인 창업·셀러, 20~40대", email:"help@imweb.me", tel:"070-7820-9700" },
+  { cat:"소호몰·셀러", access:"웹+앱", name:"마플샵", desc:"커스텀 굿즈 제작·판매. 무재고 굿즈 셀러", target:"디자인·굿즈 창작자", email:"partner@marpple.shop", tel:"1566-5496" },
+  { cat:"소호몰·셀러", access:"앱", name:"브랜디 셀러", desc:"여성 패션 셀러 마켓. 패션 상품 판매", target:"패션 셀러, 20~30대", email:"seller@brandi.co.kr", tel:"1670-1336" },
+  { cat:"소호몰·셀러", access:"앱", name:"지그재그 셀러", desc:"여성 쇼핑 플랫폼 입점. 패션몰 판매 연동", target:"패션 쇼핑몰 운영자", email:"partner@zigzag.kr", tel:"1670-9876" },
+  { cat:"설문·리서치", access:"웹+앱", name:"오픈서베이", desc:"모바일 리서치 패널. 설문 응답 리워드", target:"전 연령 설문 참여자", email:"panel@opensurvey.co.kr", tel:"02-1544-9047" },
+  { cat:"설문·리서치", access:"앱", name:"픽플러스", desc:"리워드 설문·미션 앱. 참여 적립 현금화", target:"20~40대 리워드 사용자", email:"help@pickplus.kr", tel:"02-563-7700" },
+  { cat:"설문·리서치", access:"앱", name:"캐시슬라이드", desc:"잠금화면 리워드 앱. 광고·설문 적립", target:"전 연령 리워드 사용자", email:"biz@cashslide.co.kr", tel:"02-2008-7700" },
+  { cat:"설문·리서치", access:"앱", name:"허니스크린", desc:"잠금화면·설문 리워드 앱. 적립 후 현금/기프티콘", target:"전 연령대, 소액 적립 희망자", email:"help@honeyscreen.com", tel:"02-565-8800" },
+  { cat:"설문·리서치", access:"앱", name:"캐시카우", desc:"영수증·설문 리워드 앱. 생활형 적립", target:"주부·직장인 리워드 사용자", email:"cs@cashcow.kr", tel:"02-336-9100" },
+  { cat:"설문·리서치", access:"웹+앱", name:"위즐서베이", desc:"패널 설문 리서치. 정기 설문 보상", target:"설문 패널 참여자", email:"panel@weasel.kr", tel:"02-718-1212" },
+  { cat:"반려동물 서비스", access:"앱", name:"펫시터즈", desc:"펫시터 매칭 플랫폼. 돌봄 등록 후 수익", target:"반려동물 돌봄 가능자", email:"partner@petsitters.kr", tel:"070-8064-2020" },
+  { cat:"반려동물 서비스", access:"앱", name:"도그팡", desc:"반려견 돌봄·산책 매칭. 도그워커 활동", target:"반려견 산책·돌봄 가능자", email:"help@dogpang.kr", tel:"070-4205-3030" },
+  { cat:"반려동물 서비스", access:"앱", name:"댕댕이랑", desc:"반려견 케어 O2O. 돌봄·미용 파트너", target:"반려동물 케어 경험자", email:"partner@dangdange.kr", tel:"070-8866-4040" },
+  { cat:"반려동물 서비스", access:"앱", name:"핏펫 파트너", desc:"반려동물 헬스케어 제휴. 건강·용품 파트너", target:"반려 헬스케어 사업자", email:"biz@fitpet.co.kr", tel:"070-4849-5050" },
+  { cat:"반려동물 서비스", access:"앱", name:"펫키지", desc:"반려동물 호텔·돌봄 예약. 시설·시터 입점", target:"반려 시설 운영자·시터", email:"partner@petkage.kr", tel:"070-7100-6060" },
+  { cat:"반려동물 서비스", access:"웹+앱", name:"마이펫닥터", desc:"반려동물 건강 상담·전문가 매칭", target:"수의·반려 전문가", email:"vet@mypetdoctor.kr", tel:"070-5050-7070" },
+  { cat:"인테리어·생활", access:"웹+앱", name:"하우스앱", desc:"인테리어·시공 견적 매칭. 시공 파트너 등록", target:"인테리어·시공 전문가", email:"partner@houseapp.kr", tel:"1670-2323" },
+  { cat:"인테리어·생활", access:"앱", name:"청소요", desc:"홈클리닝 매칭. 청소 매니저 등록 후 부업", target:"청소 매니저, 30~50대", email:"partner@cleanyo.kr", tel:"1522-3434" },
+  { cat:"인테리어·생활", access:"앱", name:"빨래연구소", desc:"세탁·빨래 대행 O2O. 수거·배송 파트너", target:"세탁·배송 가능자", email:"help@laundrylab.kr", tel:"1522-4545" },
+  { cat:"인테리어·생활", access:"앱", name:"도어디", desc:"생활 수리·설치 매칭. 기술자 등록 후 출장", target:"수리·설치 기술자", email:"partner@doordi.kr", tel:"1670-5656" },
+  { cat:"인테리어·생활", access:"웹+앱", name:"인테리어쇼", desc:"인테리어 견적·디자인 매칭. 전문가 입점", target:"인테리어 디자이너·시공자", email:"biz@interiorshow.kr", tel:"02-6925-6767" },
+  { cat:"인테리어·생활", access:"앱", name:"홈스토리", desc:"가사·홈케어 매니저 매칭. 정기 가사 배정", target:"가사 매니저, 40~60대", email:"partner@homestory.kr", tel:"1522-7878" },
+  { cat:"중고거래", access:"앱", name:"파라바라", desc:"무인 중고거래 자판기·앱. 셀러 위탁 판매", target:"중고 물품 판매자", email:"cs@parabara.kr", tel:"070-8095-8080" },
+  { cat:"중고거래", access:"앱", name:"보따리", desc:"동네 중고거래 앱. 간편 판매·나눔", target:"20~40대 중고 거래자", email:"help@bottari.kr", tel:"070-4242-9090" },
+  { cat:"중고거래", access:"앱", name:"차란", desc:"명품·패션 중고 거래. 위탁·검수 판매", target:"명품·패션 셀러, 20~40대", email:"partner@charan.kr", tel:"070-7878-1010" },
+  { cat:"중고거래", access:"앱", name:"콜렉트", desc:"취미·수집품 중고 거래. 셀러 입점", target:"피규어·수집 셀러", email:"cs@collect.kr", tel:"070-8866-1212" },
+  { cat:"중고거래", access:"앱", name:"리코", desc:"리퍼·중고 가전 거래. 검수 판매 연동", target:"가전·전자 셀러", email:"partner@reco.kr", tel:"1670-1313" },
+  { cat:"중고거래", access:"웹+앱", name:"중고세상", desc:"종합 중고거래 커뮤니티. 정기 셀러 등록", target:"30~50대 중고 판매자", email:"biz@junggosesang.kr", tel:"1644-1414" },
+];
+
+// ── 차월 제휴처 자동 구성 ──
+// 신규 후보 매체 = 내장 풀 + 사용자가 직접 추가한 풀
+function getPool() {
+  return MEDIA_POOL.concat(userPool);
+}
+function seoulNow() {
+  const now = new Date();
+  return new Date(now.getTime() + (now.getTimezoneOffset() + 540) * 60000); // KST(UTC+9)
+}
+function pad2(n) { return String(n).padStart(2, "0"); }
+function monthLabel(ym) { const [y, m] = ym.split("-").map(Number); return `${y}년 ${m}월`; }
+function nextMonthKey(ym) {
+  const [y, m] = ym.split("-").map(Number);
+  const d = new Date(y, m, 1); // m(1-based) → 다음 달
+  return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}`;
+}
+// 운영 기준 현재월 = 실제 KST 현재월 (데모 환경 시계 = 2026-06와 정합)
+function currentMonthKey() {
+  const n = seoulNow();
+  return `${n.getFullYear()}-${pad2(n.getMonth() + 1)}`;
+}
+// 해당 월 20일이 속한 주의 첫 영업일(월요일) 09:00 (KST 기준)
+function triggerDate(ym) {
+  const [y, m] = ym.split("-").map(Number);
+  const twentieth = new Date(y, m - 1, 20);
+  const offsetToMonday = (twentieth.getDay() + 6) % 7; // 월요일까지 거슬러
+  return new Date(y, m - 1, 20 - offsetToMonday, 9, 0, 0);
+}
+function ensureMonthOption(ym) {
+  ["monthSelect", "f-month"].forEach(selId => {
+    const sel = document.getElementById(selId);
+    if (![...sel.options].some(o => o.value === ym)) {
+      const o = document.createElement("option");
+      o.value = ym; o.textContent = monthLabel(ym);
+      sel.appendChild(o);
+    }
+  });
+}
+
+function nmTable(items, isCarry) {
+  const rows = items.map((d, i) => `<tr>
+    <td class="num-col">${i + 1}</td>
+    <td><span class="cat-tag" style="${getCatStyle(d.cat)}">${d.cat}</span></td>
+    <td>
+      <div class="svc-name">${esc(d.name)}${isCarry ? `<span class="carry-tag">${statusLabel(d.status)}</span>` : ""}</div>
+      <div class="svc-desc">${esc(d.desc)}</div>
+    </td>
+    <td class="contact-info">${d.email ? `✉️ ${esc(d.email)}<br>` : ""}${d.tel ? `📞 ${esc(d.tel)}` : ""}</td>
+  </tr>`).join("");
+  return `<div class="matrix-scroll"><table class="done-table" style="min-width:720px">
+    <thead><tr><th class="num-col">#</th><th style="width:130px">카테고리</th><th>서비스명 / 설명</th><th style="width:200px">연락처</th></tr></thead>
+    <tbody>${rows}</tbody></table></div>`;
+}
+
+function renderNext() {
+  const cur = currentMonthKey();
+  const nm = nextMonthKey(cur);
+  ensureMonthOption(nm);
+  document.getElementById("nmMonthLabel").textContent = monthLabel(nm);
+  document.getElementById("nmSub").textContent =
+    `${monthLabel(cur)} 기준 컨텍 중·예정 매체는 상단 이월, 그 아래 신규 매체 30개를 불러옵니다. (집행확정·실패·이미 컨텍한 매체 제외)`;
+
+  // 트리거 배너
+  const trig = triggerDate(cur);
+  const trigStr = `${trig.getFullYear()}-${pad2(trig.getMonth() + 1)}-${pad2(trig.getDate())} 09:00 KST`;
+  const banner = document.getElementById("nmBanner");
+  if (seoulNow() >= trig) {
+    banner.className = "nm-banner due";
+    banner.innerHTML = `🔔 업데이트 시점이 도래했습니다 (기준: ${monthLabel(cur)} 20일주 첫 영업일 <strong>${trigStr}</strong>). [리스트 업데이트]로 ${monthLabel(nm)} 제휴처를 구성하세요.`;
+  } else {
+    banner.className = "nm-banner wait";
+    banner.innerHTML = `⏳ 다음 자동 업데이트 시점: <strong>${trigStr}</strong> (${monthLabel(cur)} 20일이 속한 주 첫 영업일). 지금도 수동으로 업데이트할 수 있습니다.`;
+  }
+
+  // 후보 풀 현황(미사용 기준)
+  const usedAll = new Set(data.map(d => d.name));
+  const unusedPool = getPool().filter(p => !usedAll.has(p.name)).length;
+  document.getElementById("nmPoolStat").innerHTML =
+    `후보 풀: 총 <strong>${getPool().length}</strong>개 (내장 ${MEDIA_POOL.length} + 직접추가 ${userPool.length}) · 미사용 <strong style="color:${unusedPool < 30 ? '#DC2626' : '#15803D'}">${unusedPool}</strong>개`;
+
+  // 차월 데이터
+  const nmItems = data.filter(d => d.month === nm);
+  const body = document.getElementById("nmBody");
+  if (!nmItems.length) {
+    body.innerHTML = `<div class="nm-empty">아직 <strong>${monthLabel(nm)}</strong> 제휴처가 구성되지 않았습니다.<br>[🔄 리스트 업데이트] 버튼을 눌러 이월 매체 + 신규 매체 30개를 불러오세요.</div>`;
+    return;
+  }
+  const carried = nmItems.filter(d => d.carried);
+  const fresh = nmItems.filter(d => !d.carried);
+  const shortBy = 30 - fresh.length;
+  body.innerHTML = `
+    ${carried.length ? `<div class="nm-section-label carry">이월 매체 · 금월 컨텍 중·예정 <span class="pill">${carried.length}</span> <span style="font-weight:600;text-transform:none;letter-spacing:0">(30개 카운트에서 제외)</span></div>${nmTable(carried, true)}` : ""}
+    <div class="nm-section-label">신규 제안 매체 <span class="pill">${fresh.length}</span> <span style="font-weight:600;text-transform:none;letter-spacing:0">/ 목표 30개</span></div>
+    ${nmTable(fresh, false)}
+    ${shortBy > 0 ? `<div class="nm-note">⚠ 후보 풀에 미사용 매체가 부족하여 ${fresh.length}개만 구성되었습니다. <strong>[+ 후보 매체 추가]</strong>로 직접 보충하세요.</div>` : ""}
+  `;
+}
+
+function generateNextMonth() {
+  const cur = currentMonthKey();
+  const nm = nextMonthKey(cur);
+  ensureMonthOption(nm);
+
+  if (data.some(d => d.month === nm) &&
+      !confirm(`${monthLabel(nm)} 리스트가 이미 있습니다.\n기존 차월 리스트를 지우고 새로 구성할까요?`)) return;
+
+  // 기존 차월 데이터 제거(재생성)
+  data = data.filter(d => d.month !== nm);
+
+  // (상단) 이월: 금월 컨텍 중·예정 (상태·메모·단계 유지)
+  const carried = data.filter(d => d.month === cur && (d.status === "중" || d.status === "예정"));
+  carried.forEach(src => {
+    const clone = JSON.parse(JSON.stringify(src));
+    clone.id = nextId++;
+    clone.month = nm;
+    clone.carried = true;
+    data.push(clone);
+  });
+
+  // (하단) 신규 30: 이미 컨텍한(=data에 존재하는) 매체명 제외
+  const usedNames = new Set(data.map(d => d.name));
+  const picked = getPool().filter(p => !usedNames.has(p.name)).slice(0, 30);
+  picked.forEach(p => {
+    data.push({
+      id: nextId++, month: nm, cat: p.cat, access: p.access, name: p.name,
+      desc: p.desc, target: p.target, email: p.email, tel: p.tel,
+      status: "예정", note: "", carried: false,
+    });
+  });
+
+  saveState();
+  document.getElementById("monthSelect").value = nm;
+  renderNext();
+
+  const shortBy = 30 - picked.length;
+  if (shortBy > 0) {
+    alert(`${monthLabel(nm)} 구성 완료(일부 부족)\n· 이월 매체 ${carried.length}개(상단, 카운트 제외)\n· 신규 매체 ${picked.length}개 (후보 풀 부족으로 30개 미달 — [+ 후보 매체 추가]로 보충)`);
+  } else {
+    alert(`${monthLabel(nm)} 리스트 구성 완료!\n· 이월 매체 ${carried.length}개(상단, 30 카운트 제외)\n· 신규 제안 매체 30개(하단)`);
+  }
+}
+
+// ── 신규 후보 매체 직접 추가 ──
+function openPoolModal() { document.getElementById("poolModalOverlay").classList.add("open"); }
+function closePoolModal() { document.getElementById("poolModalOverlay").classList.remove("open"); }
+function addCandidate() {
+  const name = document.getElementById("p-name").value.trim();
+  if (!name) { alert("서비스명을 입력해주세요."); return; }
+  const dup = getPool().some(p => p.name === name) || data.some(d => d.name === name);
+  if (dup) { alert("이미 후보 풀 또는 기존 제휴처에 존재하는 매체명입니다."); return; }
+  userPool.push({
+    cat: document.getElementById("p-cat").value,
+    access: document.getElementById("p-access").value,
+    name,
+    desc: document.getElementById("p-desc").value.trim(),
+    target: document.getElementById("p-target").value.trim(),
+    email: document.getElementById("p-email").value.trim(),
+    tel: document.getElementById("p-tel").value.trim(),
+  });
+  saveState();
+  closePoolModal();
+  ["p-name", "p-desc", "p-target", "p-email", "p-tel"].forEach(id => document.getElementById(id).value = "");
+  renderNext();
+  alert(`'${name}' 후보가 추가되었습니다.\n현재 후보 풀: 총 ${getPool().length}개 (직접추가 ${userPool.length}개)`);
+}
+
+// ── 엑셀 다운로드 (외부 라이브러리 없이 Excel이 여는 .xls/HTML 테이블) ──
+function exportExcel(filename, headers, rows) {
+  const cell = s => String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const thead = `<tr>${headers.map(h => `<th style="background:#2D1060;color:#fff;font-weight:bold;border:1px solid #ccc;padding:6px 10px;">${cell(h)}</th>`).join("")}</tr>`;
+  const tbody = rows.map(r => `<tr>${r.map(c => `<td style="border:1px solid #ddd;padding:5px 10px;mso-number-format:'\\@';">${cell(c)}</td>`).join("")}</tr>`).join("");
+  const html = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="UTF-8"><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>Sheet1</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>${thead}${tbody}</table></body></html>`;
+  const blob = new Blob(["﻿", html], { type: "application/vnd.ms-excel;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function exportList() {
+  const items = getFilteredItems();
+  if (!items.length) { alert("내보낼 데이터가 없습니다."); return; }
+  const headers = ["#", "월", "카테고리", "접속방법", "서비스명", "설명", "타겟", "대표메일", "연락처", "컨텍현황"];
+  const rows = items.map((d, i) => [i + 1, d.month, d.cat, d.access, d.name, d.desc, d.target, d.email, d.tel, statusLabel(d.status)]);
+  exportExcel(`전체리스트_${document.getElementById("monthSelect").value}.xls`, headers, rows);
+}
+
+function exportPipeline() {
+  const items = pipelineItems();
+  if (!items.length) { alert("컨텍 중인 제휴처가 없습니다."); return; }
+  const headers = ["제휴처", "카테고리", "접속방법", "현재단계", "① 초기컨택", "② 제휴방향논의중", "③ 적용중", "④ 완료(결과)"];
+  const rows = items.map(d => { ensurePipeline(d); return [d.name, d.cat, d.access, STAGES[d.currentStage], d.stageMemos[0], d.stageMemos[1], d.stageMemos[2], d.stageMemos[3]]; });
+  exportExcel(`컨텍진행관리_${document.getElementById("monthSelect").value}.xls`, headers, rows);
+}
+
+function exportDone() {
+  const items = doneItems();
+  if (!items.length) { alert("종료된 제휴처가 없습니다."); return; }
+  const headers = ["제휴처", "카테고리", "결과", "종료월", "세부메모"];
+  const rows = items.map(d => { ensureDone(d); return [d.name, d.cat, statusLabel(d.status), d.doneMonth, d.doneMemo]; });
+  exportExcel(`컨텍종료_${document.getElementById("monthSelect").value}.xls`, headers, rows);
+}
+
+function exportNext() {
+  const nm = nextMonthKey(currentMonthKey());
+  const items = data.filter(d => d.month === nm);
+  if (!items.length) { alert("차월 리스트가 비어 있습니다. 먼저 [리스트 업데이트]를 실행하세요."); return; }
+  const ordered = [...items.filter(d => d.carried), ...items.filter(d => !d.carried)];
+  const headers = ["구분", "#", "카테고리", "접속방법", "서비스명", "설명", "타겟", "대표메일", "연락처", "상태"];
+  const rows = ordered.map((d, i) => [d.carried ? "이월" : "신규", i + 1, d.cat, d.access, d.name, d.desc, d.target, d.email, d.tel, statusLabel(d.status)]);
+  exportExcel(`차월제휴처_${nm}.xls`, headers, rows);
+}
 
 // ── Init ──
+if (!loadState()) saveState();   // 저장본이 있으면 복원, 없으면 초기 데이터 저장
+// 구버전/시드 데이터 마이그레이션: 완료 → 확정
+(function migrateStatuses() {
+  let changed = false;
+  data.forEach(d => {
+    if (d.status === "완료") { d.status = "확정"; ensureDone(d); changed = true; }
+    if (typeof d.carried !== "boolean") d.carried = false;
+  });
+  if (changed) saveState();
+})();
 filterData();
 </script>
 </body>
