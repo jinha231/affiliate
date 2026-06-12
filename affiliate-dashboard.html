@@ -530,6 +530,31 @@
       border-radius: 10px;
     }
     .tab-btn.active .tab-count { background: var(--dpurple-accent); }
+    .help-btn {
+      margin-left: auto;
+      align-self: center;
+      margin-bottom: 6px;
+      padding: 8px 16px;
+      border: 1.5px solid var(--dpurple-accent);
+      background: #fff;
+      color: var(--dpurple-accent);
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      white-space: nowrap;
+      transition: all 0.15s;
+    }
+    .help-btn:hover { background: #F5F3FF; box-shadow: 0 2px 8px rgba(123,47,190,0.18); }
+    /* 도움말 모달 본문 */
+    .help-body { font-size: 13px; line-height: 1.75; color: var(--text-main); }
+    .help-body h3 { font-size: 14px; font-weight: 800; color: var(--dpurple-dark); margin: 16px 0 6px; }
+    .help-body h3:first-child { margin-top: 0; }
+    .help-body ul { margin: 0 0 4px 18px; }
+    .help-body li { margin: 3px 0; }
+    .help-body .hl { color: var(--dpurple-accent); font-weight: 700; }
+    .help-body code { background: #F1F5F9; padding: 1px 6px; border-radius: 5px; font-size: 12px; }
 
     /* ── Pipeline ── */
     .pipeline-wrap { padding: 24px 32px 40px; }
@@ -886,6 +911,7 @@
   <button class="tab-btn" id="tabBtnPipeline" onclick="switchTab('pipeline')">컨텍 진행 관리<span class="tab-count" id="pipelineCount">0</span></button>
   <button class="tab-btn" id="tabBtnDone" onclick="switchTab('done')">컨텍 종료<span class="tab-count" id="doneCount">0</span></button>
   <button class="tab-btn" id="tabBtnNext" onclick="switchTab('next')">차월 제휴처 📅</button>
+  <button class="help-btn" onclick="openHelpModal()">❓ 도움말</button>
 </div>
 
 <!-- ── Tab: List ── -->
@@ -1179,6 +1205,46 @@
   </div>
 </div>
 
+<!-- ── Help Modal (도움말) ── -->
+<div class="modal-overlay" id="helpModalOverlay">
+  <div class="modal" style="width:700px">
+    <h2>📖 사용 도움말</h2>
+    <div class="help-body">
+      <h3>① 전체 리스트</h3>
+      <ul>
+        <li>선택한 <span class="hl">관리 월</span>의 전체 제휴 매체를 표로 관리합니다. (상단 <b>월별 누적 그래프</b>로 현황 한눈에)</li>
+        <li>각 행의 <span class="hl">컨텍 현황</span>을 <code>컨텍 예정 → 컨텍 중 → 집행 확정 / 실패</code> 중에서 선택합니다.</li>
+        <li><b>검색·카테고리·상태</b> 필터, <b>+ 제휴처 추가</b>, 행별 <b>삭제</b> 가능.</li>
+      </ul>
+      <h3>② 컨텍 진행 관리</h3>
+      <ul>
+        <li><span class="hl">컨텍 중</span>인 매체를 <b>4단계 매트릭스</b>(초기컨택 → 제휴방향논의중 → 적용중 → 완료)로 관리합니다.</li>
+        <li>각 셀의 <b>○ 표시</b>를 눌러 현재 단계를 지정하고, 칸마다 메모를 남깁니다. 메모 우측 <b>⤢</b>로 크게 보기.</li>
+        <li>마지막 ④ 완료 단계에서 <b>결과 메모 작성 후</b> <span class="hl">[집행 확정]/[실패]</span>를 누르면 컨텍 종료 탭으로 이동합니다.</li>
+      </ul>
+      <h3>③ 컨텍 종료</h3>
+      <ul>
+        <li><b>집행 확정 / 실패</b>로 종료된 매체의 <b>결과·종료 월·세부 메모</b>를 관리합니다.</li>
+      </ul>
+      <h3>④ 차월 제휴처 📅</h3>
+      <ul>
+        <li>다음 달 리스트를 자동 구성합니다. 매월 <b>20일이 속한 주 첫 영업일 09시(KST)</b> 도래 시 안내 배너가 뜹니다.</li>
+        <li><span class="hl">[🔄 리스트 업데이트]</span> → 금월 <b>컨텍 중·예정</b> 매체는 상단 이월(30개 카운트 제외), 그 아래 <b>미사용 신규 매체 30개</b>를 후보 풀에서 불러옵니다.</li>
+        <li>후보가 부족하면 <span class="hl">[+ 후보 매체 추가]</span>로 직접 보충할 수 있습니다.</li>
+      </ul>
+      <h3>📥 엑셀 다운로드 · 💾 저장</h3>
+      <ul>
+        <li>각 탭의 <b>⬇ 엑셀 다운로드</b>로 현재 데이터를 내려받습니다.</li>
+        <li>모든 변경은 <b>이 브라우저에 자동 저장</b>됩니다(localStorage). 다른 PC·브라우저와는 공유되지 않습니다.</li>
+        <li>처음 상태로 되돌리려면 화면 하단의 <b>"초기 데이터로 되돌리기"</b>를 누르세요.</li>
+      </ul>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-save" onclick="closeHelpModal()">확인</button>
+    </div>
+  </div>
+</div>
+
 <footer>
   © 2026 Wonder × D.Purple — 롯데손해보험 NTC 제휴처 관리 시스템 | 월 최대 30개 제휴처 관리
   &nbsp;·&nbsp; <a href="#" onclick="resetState();return false;" style="color:#DC2626;text-decoration:none;font-weight:600;">초기 데이터로 되돌리기</a>
@@ -1203,23 +1269,23 @@ const catColors = {
 let data = [
   { id:1, month:"2026-06", cat:"프리랜서 플랫폼", access:"웹+앱", name:"크몽", desc:"국내 최대 프리랜서 전문가 마켓. IT·디자인·마케팅 등 다양한 전문가 서비스 거래", target:"20~40대 N잡러, 전문직 부업자", email:"partner@kmong.com", tel:"02-1670-5765", status:"예정", note:"" },
   { id:2, month:"2026-06", cat:"프리랜서 플랫폼", access:"웹+앱", name:"숨고", desc:"생활·전문 서비스 연결 플랫폼. 레슨·번역·디자인 등 1,000여 종 카테고리 운영", target:"25~45대 부업 희망자, 전문 기술 보유자", email:"business@soomgo.com", tel:"02-6925-4400", status:"예정", note:"" },
-  { id:3, month:"2026-06", cat:"재능마켓", access:"웹+앱", name:"탈잉", desc:"강사와 수강생을 이어주는 재능공유 플랫폼. 온·오프라인 클래스 운영 가능", target:"20~35대 재능 보유 직장인, 강의 부업 희망자", email:"partner@taling.me", tel:"02-1522-3939", status:"중", note:"2026-06-03 첫 메일 발송 완료. 담당자 이민지 과장 회신 대기 중." },
+  { id:3, month:"2026-06", cat:"재능마켓", access:"웹+앱", name:"탈잉", desc:"강사와 수강생을 이어주는 재능공유 플랫폼. 온·오프라인 클래스 운영 가능", target:"20~35대 재능 보유 직장인, 강의 부업 희망자", email:"partner@taling.me", tel:"02-1522-3939", status:"예정", note:"" },
   { id:4, month:"2026-06", cat:"재능마켓", access:"웹+앱", name:"클래스101", desc:"취미·커리어 중심 온라인 클래스 플랫폼. 크리에이터 수익화 모델 운영", target:"20~40대 전문 지식 보유자, 부업 크리에이터", email:"b2b@class101.net", tel:"02-6956-0101", status:"예정", note:"" },
-  { id:5, month:"2026-06", cat:"배달·라이더", access:"앱", name:"배달의민족(배민커넥트)", desc:"배달 라이더 플랫폼. 자유로운 시간에 음식 배달로 부수입 창출 가능", target:"20~40대 이동 수단 보유자, 유연 근무 희망자", email:"connect@woowahan.com", tel:"1600-0987", status:"완료", note:"" },
+  { id:5, month:"2026-06", cat:"배달·라이더", access:"앱", name:"배달의민족(배민커넥트)", desc:"배달 라이더 플랫폼. 자유로운 시간에 음식 배달로 부수입 창출 가능", target:"20~40대 이동 수단 보유자, 유연 근무 희망자", email:"connect@woowahan.com", tel:"1600-0987", status:"예정", note:"" },
   { id:6, month:"2026-06", cat:"배달·라이더", access:"앱", name:"쿠팡이츠 배달파트너", desc:"쿠팡이츠 라이더 파트너십. 단건 배달 중심으로 건당 수익 구조", target:"20~35대 오토바이·자전거 보유자, 투잡 희망자", email:"partner@coupang.com", tel:"1577-7011", status:"예정", note:"" },
-  { id:7, month:"2026-06", cat:"콘텐츠 크리에이터", access:"웹", name:"브런치스토리", desc:"카카오 운영 글쓰기 플랫폼. 작가 활동을 통한 콘텐츠 수익화 및 브랜딩 가능", target:"25~45대 글쓰기 취미 보유자, 작가 지망생", email:"brunch@kakao.com", tel:"02-6718-1000", status:"중", note:"2026-06-01 파트너십 문의 메일 발송. 담당 부서 확인 중." },
+  { id:7, month:"2026-06", cat:"콘텐츠 크리에이터", access:"웹", name:"브런치스토리", desc:"카카오 운영 글쓰기 플랫폼. 작가 활동을 통한 콘텐츠 수익화 및 브랜딩 가능", target:"25~45대 글쓰기 취미 보유자, 작가 지망생", email:"brunch@kakao.com", tel:"02-6718-1000", status:"예정", note:"" },
   { id:8, month:"2026-06", cat:"콘텐츠 크리에이터", access:"앱", name:"네이버 블로그 파트너스퀘어", desc:"네이버 블로그·인플루언서 수익화 지원 프로그램. 광고·협찬 연결", target:"20~45대 블로그·SNS 활동 인플루언서", email:"partner@naver.com", tel:"1588-3820", status:"예정", note:"" },
   { id:9, month:"2026-06", cat:"온라인 교육", access:"웹+앱", name:"클래스유", desc:"직무·자격증·재테크 온라인 강의 플랫폼. 강사 등록 및 강의 판매 가능", target:"직장인 투잡러, 자격증 취득 희망자", email:"biz@classu.co.kr", tel:"1599-0990", status:"예정", note:"" },
   { id:10, month:"2026-06", cat:"온라인 교육", access:"웹+앱", name:"유데미 코리아", desc:"글로벌 온라인 강의 플랫폼 한국 서비스. 강사로 등록 시 글로벌 수익 창출 가능", target:"IT·디자인 전문가, 영어 가능 부업 희망자", email:"ko_instructor@udemy.com", tel:"02-538-3900", status:"예정", note:"" },
-  { id:11, month:"2026-06", cat:"소호몰·셀러", access:"웹+앱", name:"스마트스토어(네이버)", desc:"네이버 스마트스토어를 통한 온라인 쇼핑몰 창업 지원. 수수료 0% 혜택 제공", target:"부업으로 쇼핑몰 운영 희망자, 30~50대", email:"storecshelp@naver.com", tel:"1588-3820", status:"완료", note:"" },
+  { id:11, month:"2026-06", cat:"소호몰·셀러", access:"웹+앱", name:"스마트스토어(네이버)", desc:"네이버 스마트스토어를 통한 온라인 쇼핑몰 창업 지원. 수수료 0% 혜택 제공", target:"부업으로 쇼핑몰 운영 희망자, 30~50대", email:"storecshelp@naver.com", tel:"1588-3820", status:"예정", note:"" },
   { id:12, month:"2026-06", cat:"소호몰·셀러", access:"앱", name:"아이디어스", desc:"핸드메이드·수공예 작가 전문 마켓. 직접 제작한 제품 판매 가능", target:"공예·DIY 취미 보유 여성 20~40대", email:"partners@idus.com", tel:"02-6080-0307", status:"예정", note:"" },
   { id:13, month:"2026-06", cat:"설문·리서치", access:"웹+앱", name:"엠브레인 패널파워", desc:"국내 최대 리서치 패널 플랫폼. 설문 참여로 포인트 적립 및 현금 전환 가능", target:"모든 연령대, 설문 참여로 소소한 부수입 희망자", email:"panel@embrain.com", tel:"02-3483-5100", status:"예정", note:"" },
-  { id:14, month:"2026-06", cat:"설문·리서치", access:"앱", name:"캐시워크", desc:"걷기·설문·광고 시청으로 캐시 적립 가능한 생활형 리워드 앱", target:"전 연령대, 일상 속 소액 부수입 희망자", email:"biz@cashwalk.co.kr", tel:"02-563-0404", status:"중", note:"2026-06-04 B2B 파트너십 페이지를 통해 제안서 제출. 검토 기간 약 2주 소요 예정." },
+  { id:14, month:"2026-06", cat:"설문·리서치", access:"앱", name:"캐시워크", desc:"걷기·설문·광고 시청으로 캐시 적립 가능한 생활형 리워드 앱", target:"전 연령대, 일상 속 소액 부수입 희망자", email:"biz@cashwalk.co.kr", tel:"02-563-0404", status:"예정", note:"" },
   { id:15, month:"2026-06", cat:"반려동물 서비스", access:"앱", name:"펫트너", desc:"반려동물 돌봄 매칭 플랫폼. 펫시터·훈련사 등록 후 부업 가능", target:"반려동물 경험자, 20~40대 동물 애호가", email:"biz@petnner.com", tel:"070-4100-7900", status:"예정", note:"" },
   { id:16, month:"2026-06", cat:"반려동물 서비스", access:"앱", name:"도그메이트", desc:"강아지 돌봄 전문 O2O 플랫폼. 도그시터 등록 후 시간당 수익 창출 가능", target:"20~35대 반려동물 보유자, 플렉시블 스케줄 희망자", email:"partner@dogmate.co.kr", tel:"070-4200-8000", status:"예정", note:"" },
   { id:17, month:"2026-06", cat:"인테리어·생활", access:"웹+앱", name:"오늘의집", desc:"인테리어 콘텐츠·쇼핑 플랫폼. 전문가 등록 후 인테리어 서비스 판매 가능", target:"인테리어 전문가·시공 기술 보유자", email:"b2b@bucketplace.co.kr", tel:"02-6925-1004", status:"예정", note:"" },
   { id:18, month:"2026-06", cat:"인테리어·생활", access:"앱", name:"당근(지역광고)", desc:"지역 기반 당근 앱 내 광고를 통해 부업 서비스 홍보 및 고객 유치 가능", target:"지역 밀착 서비스 운영 1인 사업자", email:"biz@daangn.com", tel:"1522-8855", status:"예정", note:"" },
-  { id:19, month:"2026-06", cat:"중고거래", access:"앱", name:"번개장터", desc:"모바일 중고거래 플랫폼. 셀러 계정을 통한 중고 상품 판매 부업 가능", target:"20~35대 중고 상품 거래 희망자, 구제샵 운영자", email:"partner@bunjang.co.kr", tel:"02-6718-5000", status:"완료", note:"" },
+  { id:19, month:"2026-06", cat:"중고거래", access:"앱", name:"번개장터", desc:"모바일 중고거래 플랫폼. 셀러 계정을 통한 중고 상품 판매 부업 가능", target:"20~35대 중고 상품 거래 희망자, 구제샵 운영자", email:"partner@bunjang.co.kr", tel:"02-6718-5000", status:"예정", note:"" },
   { id:20, month:"2026-06", cat:"중고거래", access:"앱", name:"중고나라", desc:"국내 최대 규모 중고거래 커뮤니티 앱. 정기 판매자 등록 후 매출 관리 가능", target:"30~50대 중고 물품 판매 희망자", email:"biz@joonggonara.co.kr", tel:"1644-5884", status:"예정", note:"" },
   { id:21, month:"2026-06", cat:"프리랜서 플랫폼", access:"웹", name:"위시켓", desc:"국내 IT 프리랜서 프로젝트 매칭 전문 플랫폼. 개발·디자인 프로젝트 수주 가능", target:"IT 개발자·디자이너 프리랜서, 30~45대", email:"partner@wishket.com", tel:"02-1600-0055", status:"예정", note:"" },
   { id:22, month:"2026-06", cat:"콘텐츠 크리에이터", access:"웹+앱", name:"카카오 뷰", desc:"카카오 뷰 채널 운영을 통한 콘텐츠 큐레이션 수익화. 창작자 보상 프로그램 운영", target:"미디어 콘텐츠 제작 관심자, 20~40대", email:"kakaoview@kakao.com", tel:"02-6718-1000", status:"예정", note:"" },
@@ -1236,7 +1302,7 @@ let data = [
 let nextId = 31;
 
 // ── localStorage 영구 저장 ──
-const STORAGE_KEY = "wonder_dpurple_affiliates_v1";
+const STORAGE_KEY = "wonder_dpurple_affiliates_v2";
 let saveTimer = null;
 let userPool = [];   // 사용자가 앱에서 직접 추가한 신규 후보 매체
 
@@ -1711,6 +1777,9 @@ document.getElementById("memoModalOverlay").addEventListener("click", function(e
 document.getElementById("poolModalOverlay").addEventListener("click", function(e) {
   if (e.target === this) closePoolModal();
 });
+document.getElementById("helpModalOverlay").addEventListener("click", function(e) {
+  if (e.target === this) closeHelpModal();
+});
 
 // ── 차월 신규 제휴 매체 후보 풀 (Claude 발굴, 기존 시드 30개와 중복 없음) ──
 const MEDIA_POOL = [
@@ -1966,6 +2035,10 @@ function generateNextMonth() {
     alert(`${monthLabel(nm)} 리스트 구성 완료!\n· 이월 매체 ${carried.length}개(상단, 30 카운트 제외)\n· 신규 제안 매체 30개(하단)`);
   }
 }
+
+// ── 도움말 ──
+function openHelpModal() { document.getElementById("helpModalOverlay").classList.add("open"); }
+function closeHelpModal() { document.getElementById("helpModalOverlay").classList.remove("open"); }
 
 // ── 신규 후보 매체 직접 추가 ──
 function openPoolModal() { document.getElementById("poolModalOverlay").classList.add("open"); }
